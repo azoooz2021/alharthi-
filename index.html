@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Long Calendar Spread — خطة ALHARTHI الكاملة</title>
+<style>
+:root {
+  --bg: #0d1117; --bg2: #161b22; --bg3: #1c2128; --bgh: #2d333b;
+  --border: #30363d; --t1: #e6edf3; --t2: #8b949e; --t3: #6e7681;
+  --green: #3fb950; --red: #f85149; --blue: #58a6ff;
+  --yellow: #d29922; --purple: #bc8cff; --orange: #ffa657;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',Tahoma,sans-serif; background:var(--bg); color:var(--t1); direction:rtl; }
+
+/* HEADER */
+.hdr { background:linear-gradient(135deg,#0d1117,#1a2332); border-bottom:1px solid var(--border); padding:18px 28px; position:sticky; top:0; z-index:100; }
+.hdr-row { max-width:1400px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; }
+.hdr h1 { font-size:1.4rem; font-weight:700; background:linear-gradient(90deg,#58a6ff,#bc8cff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.hdr .sub { color:var(--t2); font-size:0.8rem; margin-top:3px; }
+.badge-ts { background:#ff6b35; color:#fff; padding:4px 14px; border-radius:20px; font-size:0.8rem; font-weight:700; }
+.tg-btn { display:inline-flex; align-items:center; gap:7px; background:#229ED9; color:#fff; padding:7px 16px; border-radius:20px; font-size:0.82rem; font-weight:700; text-decoration:none; transition:opacity .2s; }
+.tg-btn:hover { opacity:.85; }
+
+/* LIBRARY BANNER */
+.lib-bar { background:linear-gradient(135deg,#0d1117,#111827); border-bottom:1px solid rgba(88,166,255,.15); padding:10px 28px; }
+.lib-inner { max-width:1400px; margin:0 auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.lib-left { display:flex; flex-direction:column; gap:2px; white-space:nowrap; }
+.lib-title { font-size:.78rem; font-weight:700; color:var(--blue); }
+.lib-desc { font-size:.7rem; color:var(--t3); }
+.lib-strategies { display:flex; gap:6px; flex-wrap:wrap; flex:1; }
+.lib-s { padding:3px 12px; border-radius:20px; font-size:.74rem; font-weight:600; white-space:nowrap; }
+.lib-s-active { background:linear-gradient(90deg,rgba(88,166,255,.2),rgba(188,140,255,.2)); color:#fff; border:1px solid rgba(88,166,255,.45); }
+.lib-s-other { background:rgba(255,255,255,.03); color:var(--t3); border:1px solid rgba(255,255,255,.07); cursor:default; }
+.lib-follow { display:inline-flex; align-items:center; gap:6px; background:#229ED9; color:#fff; padding:5px 14px; border-radius:20px; font-size:.74rem; font-weight:700; text-decoration:none; white-space:nowrap; transition:opacity .2s; }
+.lib-follow:hover { opacity:.85; }
+
+/* NAV */
+.nav { background:var(--bg2); border-bottom:1px solid var(--border); display:flex; overflow-x:auto; padding:0 16px; }
+.nav-item { padding:13px 18px; cursor:pointer; color:var(--t2); border-bottom:2px solid transparent; white-space:nowrap; font-size:0.875rem; transition:all 0.2s; }
+.nav-item:hover { color:var(--t1); background:var(--bgh); }
+.nav-item.on { color:var(--blue); border-bottom-color:var(--blue); font-weight:600; }
+
+/* MAIN */
+.wrap { max-width:1400px; margin:0 auto; padding:22px 24px; }
+.panel { display:none; animation:fi 0.25s ease; }
+.panel.on { display:block; }
+@keyframes fi { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* CARDS */
+.card { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:20px; margin-bottom:18px; }
+.ct { font-size:1.05rem; font-weight:600; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+
+/* GRID */
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; }
+.g4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:18px; }
+
+/* FORM */
+.fg { margin-bottom:14px; }
+.fg label { display:block; color:var(--t2); font-size:0.82rem; margin-bottom:5px; font-weight:500; }
+.fg input, .fg select { width:100%; background:var(--bg2); border:1px solid var(--border); border-radius:6px; padding:9px 13px; color:var(--t1); font-size:0.9rem; transition:border-color 0.2s; direction:ltr; text-align:right; }
+.fg input:focus, .fg select:focus { outline:none; border-color:var(--blue); }
+.fg input::placeholder { color:var(--t3); }
+
+/* BUTTONS */
+.btn { padding:10px 22px; border-radius:6px; border:none; cursor:pointer; font-size:0.9rem; font-weight:600; transition:all 0.2s; }
+.btn-b { background:var(--blue); color:#fff; } .btn-b:hover { opacity:0.85; }
+.btn-g { background:var(--green); color:#fff; } .btn-g:hover { opacity:0.85; }
+.btn-w { width:100%; }
+
+/* BADGES */
+.sb { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:600; }
+.sg { background:rgba(63,185,80,.15); color:var(--green); border:1px solid rgba(63,185,80,.3); }
+.sr { background:rgba(248,81,73,.15); color:var(--red); border:1px solid rgba(248,81,73,.3); }
+.sy { background:rgba(210,153,34,.15); color:var(--yellow); border:1px solid rgba(210,153,34,.3); }
+.sb2 { background:rgba(88,166,255,.15); color:var(--blue); border:1px solid rgba(88,166,255,.3); }
+.sp  { background:rgba(188,140,255,.15); color:var(--purple); border:1px solid rgba(188,140,255,.3); }
+.sb3 { background:rgba(188,140,255,.2);  color:var(--purple); border:1px solid rgba(188,140,255,.4); }
+
+/* METRICS */
+.mc { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:14px; text-align:center; }
+.ml { color:var(--t3); font-size:0.78rem; margin-bottom:6px; }
+.mv { font-size:1.4rem; font-weight:700; }
+.ms { color:var(--t3); font-size:0.72rem; margin-top:3px; }
+
+/* CHECK ITEMS */
+.ci { display:flex; align-items:center; gap:10px; padding:10px; border-radius:6px; margin-bottom:6px; transition:background 0.2s; }
+.ci:hover { background:var(--bgh); }
+.ci-icon { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; flex-shrink:0; }
+.ip { background:rgba(110,118,129,.2); color:var(--t3); }
+.ig { background:rgba(63,185,80,.2); color:var(--green); }
+.ir { background:rgba(248,81,73,.2); color:var(--red); }
+.ib { background:rgba(188,140,255,.25); color:var(--purple); }
+.ci-txt .cit { font-size:0.88rem; font-weight:500; }
+.ci-txt .cid { font-size:0.78rem; color:var(--t3); margin-top:2px; }
+
+/* RESULT BOXES */
+.rb { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:18px; margin-top:14px; }
+.rb.ok { border-color:var(--green); background:rgba(63,185,80,.05); }
+.rb.er { border-color:var(--red); background:rgba(248,81,73,.05); }
+.rb.wa { border-color:var(--yellow); background:rgba(210,153,34,.05); }
+.rb.in { border-color:var(--blue); background:rgba(88,166,255,.05); }
+.rb.pu { border-color:var(--purple); background:rgba(188,140,255,.05); }
+.hidden { display:none !important; }
+
+/* CALLOUTS */
+.ca { border-radius:7px; padding:12px 15px; margin:10px 0; font-size:0.86rem; line-height:1.7; }
+.cb { background:rgba(88,166,255,.08); border-right:3px solid var(--blue); }
+.cg { background:rgba(63,185,80,.08); border-right:3px solid var(--green); }
+.cr { background:rgba(248,81,73,.08); border-right:3px solid var(--red); }
+.cy { background:rgba(210,153,34,.08); border-right:3px solid var(--yellow); }
+.cp { background:rgba(188,140,255,.08); border-right:3px solid var(--purple); }
+
+/* SCENARIO CARDS */
+.sc { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:14px; margin-bottom:10px; cursor:pointer; transition:all 0.2s; }
+.sc:hover, .sc.on { border-color:var(--blue); background:rgba(88,166,255,.04); }
+.sc-title { font-weight:600; font-size:0.9rem; margin-bottom:5px; display:flex; align-items:center; gap:7px; }
+.sc-desc { color:var(--t2); font-size:0.82rem; line-height:1.6; }
+
+/* STEPS */
+.step { display:flex; gap:12px; margin-bottom:14px; }
+.sn { width:30px; height:30px; border-radius:50%; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.82rem; flex-shrink:0; }
+.sc2 { flex:1; padding-top:3px; }
+.st { font-weight:600; font-size:0.9rem; }
+.sd { color:var(--t2); font-size:0.82rem; margin-top:3px; line-height:1.6; }
+
+/* GREEKS */
+.gi { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:14px; display:flex; align-items:center; gap:14px; margin-bottom:10px; }
+.gs { font-size:1.7rem; font-style:italic; width:46px; text-align:center; font-family:'Times New Roman',serif; }
+.gn { font-weight:600; font-size:0.92rem; }
+.gd { color:var(--t3); font-size:0.78rem; margin-top:3px; line-height:1.5; }
+
+/* BIG DECISION */
+.bd { border-radius:12px; padding:22px; text-align:center; margin-top:18px; }
+.bd-icon { font-size:2.8rem; margin-bottom:10px; }
+.bd-title { font-size:1.4rem; font-weight:700; margin-bottom:7px; }
+.bd-desc { color:var(--t2); font-size:0.9rem; line-height:1.8; }
+.bd-roll { background:rgba(88,166,255,.1); border:2px solid var(--blue); }
+.bd-close { background:rgba(248,81,73,.1); border:2px solid var(--red); }
+.bd-hold { background:rgba(63,185,80,.1); border:2px solid var(--green); }
+.bd-naked { background:rgba(188,140,255,.1); border:2px solid var(--purple); }
+
+/* TRADE LOG */
+.btn-add { margin-top:14px; background:var(--blue); color:#fff; border:none; border-radius:8px; padding:10px 28px; font-size:.95rem; font-weight:700; cursor:pointer; width:100%; }
+.btn-add:hover { opacity:.85; }
+.lg-row { display:grid; grid-template-columns:2fr 1fr 1fr 1fr 1fr auto; gap:0; border-bottom:1px solid var(--border); align-items:center; }
+.lg-row:last-child { border-bottom:none; }
+.lg-hd { background:var(--card); font-size:.78rem; color:var(--t3); font-weight:600; }
+.lg-cell { padding:10px 8px; font-size:.88rem; }
+.lg-act { display:flex; gap:6px; padding:6px 8px; }
+.lg-btn { border:none; border-radius:6px; padding:5px 10px; font-size:.78rem; cursor:pointer; font-weight:600; }
+.lg-btn-v { background:rgba(88,166,255,.15); color:var(--blue); }
+.lg-btn-v:hover { background:rgba(88,166,255,.3); }
+.lg-btn-d { background:rgba(248,81,73,.12); color:var(--red); }
+.lg-btn-d:hover { background:rgba(248,81,73,.25); }
+.lg-status { display:inline-block; padding:2px 9px; border-radius:20px; font-size:.75rem; font-weight:700; }
+.lg-row.active-row { background:rgba(88,166,255,.07); }
+.st-open   { background:rgba(63,185,80,.15);   color:var(--green); }
+.st-roll   { background:rgba(88,166,255,.15);  color:var(--blue); }
+.st-naked  { background:rgba(188,140,255,.15); color:var(--purple); }
+.st-profit { background:rgba(63,185,80,.25);   color:var(--green); }
+.st-closed { background:rgba(248,81,73,.12);   color:var(--red); }
+
+/* TABLE */
+table { width:100%; border-collapse:collapse; }
+th { background:var(--bg); color:var(--t2); padding:9px 13px; text-align:right; font-size:0.82rem; font-weight:500; }
+td { padding:10px 13px; border-bottom:1px solid var(--border); font-size:0.87rem; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:var(--bgh); }
+
+/* DIVIDER */
+hr.dv { border:none; border-top:1px solid var(--border); margin:16px 0; }
+.sdiv { display:flex; align-items:center; gap:10px; margin:16px 0; color:var(--t3); font-size:0.78rem; }
+.sdiv::before, .sdiv::after { content:''; flex:1; border-top:1px solid var(--border); }
+
+/* TOGGLE */
+.tg { display:flex; gap:7px; flex-wrap:wrap; }
+.tb { padding:7px 15px; border-radius:20px; border:1px solid var(--border); background:var(--bg2); color:var(--t2); cursor:pointer; font-size:0.82rem; transition:all 0.2s; }
+.tb:hover { border-color:var(--blue); color:var(--t1); }
+.tb.on { background:var(--blue); border-color:var(--blue); color:#fff; }
+
+/* PROGRESS */
+.pb { background:var(--bg); border-radius:4px; height:7px; overflow:hidden; margin-top:7px; }
+.pf { height:100%; border-radius:4px; transition:width 0.5s; }
+
+@media(max-width:768px) {
+  .g2,.g3,.g4 { grid-template-columns:1fr }
+  .wrap { padding:12px }
+
+  /* Header */
+  .hdr { padding:14px 12px }
+  .hdr-row { flex-direction:column; gap:10px; align-items:flex-start }
+  h1 { font-size:1.2rem }
+  .sub { font-size:.8rem }
+
+  /* Nav — scrollable row */
+  .nav {
+    display:flex; flex-direction:row; flex-wrap:nowrap;
+    overflow-x:auto; -webkit-overflow-scrolling:touch;
+    gap:6px; padding:10px 12px;
+    scrollbar-width:none;
+  }
+  .nav::-webkit-scrollbar { display:none }
+  .nav-item {
+    white-space:nowrap; flex-shrink:0;
+    padding:7px 12px; font-size:.78rem;
+  }
+
+  /* Trade log — card layout on mobile */
+  .lg-row {
+    display:flex; flex-direction:row; flex-wrap:wrap;
+    padding:10px; gap:4px; align-items:center;
+    border-bottom:1px solid var(--border);
+  }
+  .lg-row.lg-hd { display:none }
+  .lg-row > .lg-cell:first-child { flex:1; min-width:60% }
+  .lg-cell { padding:2px 4px; font-size:.85rem }
+  .lg-cell-hide { display:none }
+  .lg-act { padding:4px 0; flex-wrap:wrap; width:100% }
+
+  /* Tables scroll */
+  table { display:block; overflow-x:auto; -webkit-overflow-scrolling:touch }
+
+  /* Decision engine */
+  .bd { padding:14px }
+  .bd-icon { font-size:2rem }
+  .bd-title { font-size:1.1rem }
+  .bd-desc { font-size:.83rem }
+
+  /* Telegram button */
+  .tg-btn { padding:7px 12px; font-size:.8rem }
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-row">
+    <div>
+      <h1>📊 Long Calendar Spread</h1>
+      <div class="sub">الخطة الكاملة الرسمية — مبنية 100% على منهج ALHARTHI</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <a href="https://t.me/Elite_trade10" target="_blank" class="tg-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        تواصل معنا
+      </a>
+      <span class="badge-ts">ALHARTHI</span>
+    </div>
+  </div>
+</div>
+
+
+<div class="nav">
+  <div class="nav-item on"  onclick="nav('entry',this)">🔍 شروط الدخول</div>
+  <div class="nav-item" onclick="nav('greeks',this)">🔢 اليونانيات</div>
+  <div class="nav-item" onclick="nav('exit',this)">🚪 شروط الخروج</div>
+  <div class="nav-item" onclick="nav('manage',this)">⚙️ الإدارة</div>
+  <div class="nav-item" onclick="nav('rules',this)">⚠️ القواعد الذهبية</div>
+  <div class="nav-item" onclick="nav('decision',this)">🧠 قرار فوري</div>
+  <div class="nav-item" onclick="nav('example',this)">📒 سجل صفقاتي</div>
+</div>
+
+<div class="wrap">
+
+<!-- ═══════════════ PANEL 1: ENTRY ═══════════════ -->
+<div id="p-entry" class="panel on">
+  <div class="g2">
+    <div>
+      <div class="card">
+        <div class="ct">📝 أدخل بيانات الصفقة</div>
+
+        <div class="fg"><label>السهم (Underlying)</label>
+          <input id="e-ticker" type="text" placeholder="AAPL, TSLA, SPY…" oninput="chkEntry()"></div>
+
+        <div class="fg"><label>IV Rank / IV Percentile (%)</label>
+          <input id="e-iv" type="number" placeholder="0-100" min="0" max="100" oninput="chkEntry()">
+          <div style="display:flex;justify-content:space-between;color:var(--t3);font-size:.72rem;margin-top:3px"><span>0%</span><span style="color:var(--yellow)">المطلوب ≤ 40%</span><span>100%</span></div></div>
+
+        <div class="fg"><label>النظرة (Outlook)</label>
+          <select id="e-outlook" onchange="chkEntry()">
+            <option value="">-- اختر --</option>
+            <option value="neu">محايدة (Neutral)</option>
+            <option value="mbull">ميل طفيف صعودي (Mildly Bullish)</option>
+            <option value="mbear">ميل طفيف هبوطي (Mildly Bearish)</option>
+            <option value="sbull">صعودي قوي</option>
+            <option value="sbear">هبوطي قوي</option>
+          </select></div>
+
+        <hr class="dv">
+        <div style="font-size:.88rem;color:var(--t2);font-weight:600;margin-bottom:10px">الساق الأمامية — Front (Short)</div>
+        <div class="g2">
+          <div class="fg"><label>Strike الأمامي</label><input id="e-fs" type="number" placeholder="290" oninput="chkEntry()"></div>
+          <div class="fg"><label>DTE الأمامي (أيام)</label><input id="e-fd" type="number" placeholder="30-45" oninput="chkEntry()"></div>
+        </div>
+
+        <div style="font-size:.88rem;color:var(--t2);font-weight:600;margin-bottom:10px">الساق الخلفية — Back (Long)</div>
+        <div class="g2">
+          <div class="fg"><label>Strike الخلفي</label><input id="e-bs" type="number" placeholder="290" oninput="chkEntry()"></div>
+          <div class="fg"><label>DTE الخلفي (أيام)</label><input id="e-bd" type="number" placeholder="60-90" oninput="chkEntry()"></div>
+        </div>
+
+        <div class="fg"><label>نوع الخيار</label>
+          <div class="tg" id="tg-type">
+            <div class="tb" onclick="tgl('tg-type',this,'call')">Call 📈</div>
+            <div class="tb" onclick="tgl('tg-type',this,'put')">Put 📉</div>
+          </div></div>
+
+        <div class="fg"><label>سعر السهم الحالي ($)</label>
+          <input id="e-price" type="number" placeholder="290" oninput="chkEntry()"></div>
+
+        <div class="fg"><label>Net Debit المدفوع ($)</label>
+          <input id="e-debit" type="number" placeholder="6.82" step="0.01" oninput="chkEntry()"></div>
+
+        <div class="fg"><label>هل هناك حدث كبير قريب؟ (Earnings / خبر)</label>
+          <div class="tg" id="tg-ev">
+            <div class="tb on" onclick="tgl('tg-ev',this,'no')">لا ✓</div>
+            <div class="tb" onclick="tgl('tg-ev',this,'yes')">نعم — تجنب ⚠️</div>
+            <div class="tb" onclick="tgl('tg-ev',this,'crush')">IV Crush Play 💥</div>
+          </div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="ct">✅ فحص شروط الدخول</div>
+        <div class="ci"><div class="ci-icon ip" id="ic-iv">?</div><div class="ci-txt"><div class="cit">IV Rank منخفض (&lt;40%)</div><div class="cid" id="dt-iv">المطلوب: 25-40% — لم تُدخل قيمة</div></div><span class="sb sb2" id="bg-iv">انتظار</span></div>
+        <div class="ci"><div class="ci-icon ip" id="ic-ou">?</div><div class="ci-txt"><div class="cit">النظرة: محايدة أو ميل خفيف</div><div class="cid" id="dt-ou">Neutral / Mildly Bullish أو Bearish</div></div><span class="sb sb2" id="bg-ou">انتظار</span></div>
+        <div class="ci"><div class="ci-icon ip" id="ic-fd">?</div><div class="ci-txt"><div class="cit">DTE الأمامي: 30-45 يوم</div><div class="cid" id="dt-fd">لم تُدخل قيمة</div></div><span class="sb sb2" id="bg-fd">انتظار</span></div>
+        <div class="ci"><div class="ci-icon ip" id="ic-bd">?</div><div class="ci-txt"><div class="cit">DTE الخلفي: 60-90+ يوم</div><div class="cid" id="dt-bd">لم تُدخل قيمة</div></div><span class="sb sb2" id="bg-bd">انتظار</span></div>
+        <div class="ci"><div class="ci-icon ip" id="ic-st">?</div><div class="ci-txt"><div class="cit">Strike = ATM أو قريب جداً</div><div class="cid" id="dt-st">أدخل Strike وسعر السهم</div></div><span class="sb sb2" id="bg-st">انتظار</span></div>
+        <div class="ci"><div class="ci-icon ip" id="ic-db">?</div><div class="ci-txt"><div class="cit">Net Debit ≤ 2% من سعر السهم</div><div class="cid" id="dt-db">أقل ما يمكن</div></div><span class="sb sb2" id="bg-db">انتظار</span></div>
+        <div class="ci"><div class="ci-icon ip" id="ic-ev">?</div><div class="ci-txt"><div class="cit" id="dt-ev-t">الأحداث الكبيرة (Earnings)</div><div class="cid" id="dt-ev">Earnings أو أخبار → تؤذي Calendar النقي</div></div><span class="sb sb2" id="bg-ev">انتظار</span></div>
+        <div class="ci"><div class="ci-icon ip" id="ic-ss">?</div><div class="ci-txt"><div class="cit">نفس الـ Strike للساقين (Calendar)</div><div class="cid" id="dt-ss">Front Strike = Back Strike</div></div><span class="sb sb2" id="bg-ss">انتظار</span></div>
+
+        <div id="res-entry" class="rb hidden"><div id="res-entry-c"></div></div>
+      </div>
+
+      <div class="card">
+        <div class="ct">💰 ملخص الصفقة</div>
+        <div class="g2">
+          <div class="mc"><div class="ml">Max Loss</div><div class="mv" id="sm-ml" style="color:var(--red)">--</div><div class="ms">Net Debit المدفوع</div></div>
+          <div class="mc"><div class="ml">Max Profit</div><div class="mv" id="sm-mp" style="color:var(--green)">--</div><div class="ms">≈ 2-4× الـ Debit</div></div>
+          <div class="mc"><div class="ml">هدف الربح 25%</div><div class="mv" id="sm-t25" style="color:var(--blue)">--</div><div class="ms">خروج مثالي</div></div>
+          <div class="mc"><div class="ml">% من سعر السهم</div><div class="mv" id="sm-pct" style="color:var(--yellow)">--</div><div class="ms">يجب ≤ 2%</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PANEL 2: GREEKS ═══════════════ -->
+<div id="p-greeks" class="panel">
+  <div class="card">
+    <div class="ct">🔢 اليونانيات (Greeks) — لماذا تربح من هذه الاستراتيجية؟</div>
+    <div class="ca cb">في Long Calendar Spread تستفيد من <strong>3 مصادر ربح</strong>: تآكل الوقت (Theta)، تغير التقلب (Vega)، وبقاء السعر قريباً من Strike.</div>
+  </div>
+
+  <div class="gi"><div class="gs" style="color:var(--green)">Θ</div><div style="flex:1"><div class="gn">Net Theta — موجب ✓</div><div class="gd">الـ Front يتحلل <strong>أسرع</strong> من الـ Back → تربح من مرور الوقت يومياً.<br>الـ Front قريب الانتهاء → Time Value يتلاشى سريعاً. الـ Back يحتفظ بقيمته أكثر.</div></div><div><span class="sb sg">موجب ✓</span><div style="color:var(--green);font-size:.75rem;margin-top:5px;text-align:center">ربح يومي</div></div></div>
+
+  <div class="gi"><div class="gs" style="color:var(--blue)">V</div><div style="flex:1"><div class="gn">Net Vega — موجب ✓</div><div class="gd">
+    Back يملك Vega أعلى من Front → Net Vega <strong>موجب</strong>.<br>
+    📊 <strong>صفقة عادية:</strong> تربح عندما <strong>يرتفع IV ↑</strong> — لهذا تدخل عند IV منخفض وتنتظر ارتفاعه.<br>
+    ❌ <strong>IV Crush في الصفقة العادية يضرك</strong> — Back يخسر قيمة Vega أكثر من Front.<br>
+    💥 <strong>Earnings Play فقط:</strong> Front يملك IV مرتفعاً جداً → ينهار بعد الخبر أسرع من Back → تستفيد من فارق السرعة.
+  </div></div><div><span class="sb sb2">موجب ✓</span><div style="color:var(--blue);font-size:.75rem;margin-top:5px;text-align:center">يحب IV ↑</div></div></div>
+
+  <div class="gi"><div class="gs" style="color:var(--yellow)">Δ</div><div style="flex:1"><div class="gn">Net Delta — محايد (≈ 0)</div><div class="gd">الصفقة شبه محايدة اتجاهياً.<br>Mild Bullish → OTM Call (Delta موجب قليل).<br>Mild Bearish → OTM Put (Delta سالب قليل).</div></div><div><span class="sb sy">≈ 0</span><div style="color:var(--yellow);font-size:.75rem;margin-top:5px;text-align:center">محايد</div></div></div>
+
+  <div class="gi"><div class="gs" style="color:var(--purple)">Γ</div><div style="flex:1"><div class="gn">Net Gamma — سالب ⚠️</div><div class="gd">
+    Front (قريب الانتهاء) يملك Gamma <strong>أعلى</strong> من Back.<br>
+    أنت Short الـ Front → Net Gamma = <strong>سالب</strong>.<br>
+    الحركة القوية تضرك مباشرة — Gamma سالب يعني كلما تحرك السعر كلما خسرت.<br>
+    <strong>بقاء السعر قريب من Strike = صديقك الأول.</strong>
+  </div></div><div><span class="sb sr">سالب ⚠️</span><div style="color:var(--red);font-size:.75rem;margin-top:5px;text-align:center">يكره الحركة</div></div></div>
+
+  <div class="card" style="margin-top:18px">
+    <div class="ct">📊 جدول Greeks المثالي</div>
+    <table><thead><tr><th>Greek</th><th>الوضع المثالي</th><th>ماذا يعني</th><th>الخطر الرئيسي</th></tr></thead>
+    <tbody>
+      <tr><td><strong style="color:var(--green)">Net Theta</strong></td><td><span class="sb sg">موجب</span></td><td>تكسب من مرور الوقت يومياً</td><td>لا خطر كبير</td></tr>
+      <tr><td><strong style="color:var(--blue)">Net Vega</strong></td><td><span class="sb sb2">موجب</span></td><td>تكسب عندما يرتفع IV — ادخل عند IV منخفض</td><td>IV Crush يضرك في الصفقة العادية</td></tr>
+      <tr><td><strong style="color:var(--yellow)">Net Delta</strong></td><td><span class="sb sy">≈ 0</span></td><td>محايد اتجاهياً</td><td>حركة قوية جداً</td></tr>
+      <tr><td><strong style="color:var(--purple)">Net Gamma</strong></td><td><span class="sb sr">سالب ⚠️</span></td><td>Front أعلى Gamma وأنت Short → سالب</td><td>أي حركة في السعر تضرك</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="card">
+    <div class="ct">📈 Strike المثالي حسب النظرة</div>
+    <table><thead><tr><th>النظرة</th><th>نوع الخيار</th><th>Strike المناسب</th><th>ملاحظة</th></tr></thead>
+    <tbody>
+      <tr><td>Neutral</td><td>Call أو Put</td><td><span class="sb sy">ATM تماماً</span></td><td>دفاع الأقوى</td></tr>
+      <tr><td>Mildly Bullish</td><td>Call</td><td><span class="sb sb2">OTM قليلاً فوق السعر</span></td><td>Delta موجب خفيف</td></tr>
+      <tr><td>Mildly Bearish</td><td>Put</td><td><span class="sb sb2">OTM قليلاً تحت السعر</span></td><td>Delta سالب خفيف</td></tr>
+      <tr><td>قوي جداً</td><td>—</td><td><span class="sb sr">لا تستخدم Calendar</span></td><td>استخدم Diagonal أو غيره</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- ═══════════════ PANEL 3: EXIT ═══════════════ -->
+<div id="p-exit" class="panel">
+  <div class="g2">
+    <div>
+      <div class="card">
+        <div class="ct">🚪 حاسبة الخروج</div>
+        <div class="fg"><label>نوع الصفقة</label>
+          <div class="tg" id="ex-goal">
+            <div class="tb on" onclick="tgl('ex-goal',this,'normal')">📊 عادي (Theta)</div>
+            <div class="tb" onclick="tgl('ex-goal',this,'crush')">💥 IV Crush / أخبار</div>
+          </div></div>
+        <div class="fg"><label>Net Debit الأصلي المدفوع ($)</label>
+          <input id="ex-d" type="number" placeholder="6.82" step="0.01" oninput="calcExit()"></div>
+        <div class="fg"><label>القيمة الحالية للـ Spread ($)</label>
+          <input id="ex-c" type="number" placeholder="القيمة الآن" step="0.01" oninput="calcExit()"></div>
+        <div class="fg"><label>DTE الأمامي المتبقي (أيام)</label>
+          <input id="ex-dte" type="number" placeholder="أيام" oninput="calcExit()"></div>
+        <div id="res-exit" class="rb hidden"><div id="res-exit-c"></div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="ct">📏 قواعد الخروج الرسمية (ALHARTHI)</div>
+
+        <div class="ca cg"><strong>ربح (Winners):</strong> أغلق عند 10-25% من الـ Debit المدفوع.<br>
+        مثال: دفعت $6.82 → اخرج عند ربح $0.68 – $1.70<br>
+        <span style="color:var(--t3);font-size:.8rem">"We tend to manage our winners at around 25% of the debit we paid... Waiting too long could mean more stock price movement."</span></div>
+
+        <div class="ca cr"><strong>خسارة (Losers):</strong> Max Loss = الـ Debit كامل. <strong>لا تطارد</strong> — Defined Risk.</div>
+
+        <div class="ca cy"><strong>خروج زمني:</strong> أغلق قبل انتهاء الـ Front بـ 5-7 أيام.<br>لتجنب Gamma Explosion عند الانتهاء.</div>
+
+        <div class="ca cb"><strong>السيناريو المثالي:</strong> اخرج عند DTE 21 في الـ Front بعد تحقيق هدف الربح.</div>
+      </div>
+
+      <div class="card">
+        <div class="ct">📊 جدول أهداف الربح</div>
+        <table><thead><tr><th>Debit</th><th>هدف 10%</th><th>هدف 25%</th><th>Max Loss</th></tr></thead>
+        <tbody id="exit-tbl"><tr><td colspan="4" style="text-align:center;color:var(--t3)">أدخل Net Debit أعلاه</td></tr></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PANEL 4: MANAGE ═══════════════ -->
+<div id="p-manage" class="panel">
+  <div class="card">
+    <div class="ct">⚙️ إدارة السيناريوهات — منهج ALHARTHI</div>
+    <div class="ca cb">
+      Long Calendar Spread هي صفقة <strong>Defined Risk</strong> — Max Loss = Net Debit المدفوع.<br>
+      منهج ALHARTHI: لا تنتظر حتى تصل للـ Max Loss — <strong>أدِر الصفقة بفاعلية</strong> عند الحركة بتحويلها إلى Diagonal لأنه أقوى دفاعاً وأكثر مرونة.
+    </div>
+  </div>
+
+  <div class="g3">
+    <div class="sc on" onclick="selSc(1,this)">
+      <div class="sc-title">📈 سيناريو 1: السعر ما تحرك (المثالي)</div>
+      <div class="sc-desc">السعر يبقى قريباً من Strike — الوضع الأفضل للاستراتيجية</div>
+    </div>
+    <div class="sc" onclick="selSc(2,this)">
+      <div class="sc-title">⚡ سيناريو 2: تحرك قوي ← الأهم</div>
+      <div class="sc-desc">صعود أو هبوط قوي — يحتاج إدارة احترافية</div>
+    </div>
+    <div class="sc" onclick="selSc(3,this)">
+      <div class="sc-title">💥 سيناريو 3: IV Crush بعد Earnings</div>
+      <div class="sc-desc">انهيار IV بعد النتائج — Front ينهار بسرعة</div>
+    </div>
+  </div>
+
+  <!-- Scenario 1 -->
+  <div id="sc1" class="card">
+    <div class="ct" style="color:var(--green)">📈 السيناريو 1: السعر يتحرك ما تحرك (المثالي)</div>
+    <div class="step"><div class="sn">1</div><div class="sc2"><div class="st">راقب فقط</div><div class="sd">لا داعي لأي تدخل. الـ Theta يعمل لصالحك يومياً. الـ Spread يكتسب قيمة بمرور الوقت.</div></div></div>
+    <div class="step"><div class="sn">2</div><div class="sc2"><div class="st">اخرج عند تحقيق الهدف</div><div class="sd">أغلق عند 10-25% ربح من الـ Debit، أو عند DTE 21 في الـ Front — أيهما أسبق.</div></div></div>
+    <div class="ca cg"><strong>Probability of Success:</strong> حوالي 45-50% — متوسط. تحتاج السعر يبقى قريباً.<br>
+    <strong>مثال:</strong> دفعت $6.82 → هدف 10%: أغلق عند $7.50 (ربح $0.68) | هدف 25%: أغلق عند $8.53 (ربح $1.71)</div>
+  </div>
+
+  <!-- Scenario 2 -->
+  <div id="sc2" class="card hidden">
+    <div class="ct" style="color:var(--red)">⚡ السيناريو 2: تحرك قوي — الأهم</div>
+
+    <div class="sdiv">حالة أ: الـ Front لا زال حياً (DTE &gt; 7 أيام)</div>
+    <div class="step"><div class="sn">أ</div><div class="sc2"><div class="st">ارحل الـ Short Leg (Front) إلى Strike جديد</div>
+    <div class="sd">اختر Strike جديد قريب من السعر الحالي → يصبح <strong>Diagonal Calendar</strong>.<br>
+    تجمع Credit إضافي → تقلل Cost Basis.<br>
+    <span style="color:var(--green)">📈 Call: السعر ارتفع → ارحل إلى Strike أعلى | مثال: Short 290 → السعر عند 310 → ارحل إلى Short 310</span><br>
+    <span style="color:var(--red)">📉 Put: السعر انخفض → ارحل إلى Strike أدنى | مثال: Short 290 → السعر عند 270 → ارحل إلى Short 270</span>
+    </div></div></div>
+
+    <div class="ca cb"><strong>كيف ترحّل:</strong><br>
+    1. أغلق الـ Short الحالي (ادفع Premium)<br>
+    2. افتح Short جديد بـ Strike أقرب للسعر (اجمع Premium)<br>
+    3. الفرق بينهما = Credit صافي → يخفض Cost Basis<br>
+    <span style="color:var(--t3);font-size:.82rem">⚠️ إذا كان Credit صافي سالب → ليس ترحيلاً مثالياً، تأكد من الأرقام أولاً</span></div>
+
+    <div class="sdiv">حالة ب: الـ Front انتهى أو قريب جداً (&lt; 7 أيام)</div>
+    <div class="step"><div class="sn">ب</div><div class="sc2"><div class="st">اترك الـ Back Leg مفرداً (Long Call/Put)</div>
+    <div class="sd">إذا تعافى السعر وعاد قريباً من Strike → الـ Back يربح.<br>
+    إذا لم يتعافَ → أغلق الـ Back إذا خسر 50-70% من الـ Debit الأصلي.</div></div></div>
+
+    <div class="step"><div class="sn">ج</div><div class="sc2"><div class="st">خيار دفاعي: حوّل الـ Back إلى Vertical Spread</div>
+    <div class="sd">
+    📈 <strong>Call:</strong> بيع Call بـ Strike أعلى ضد الـ Back Long Call → يصبح Bull Call Spread<br>
+    📉 <strong>Put:</strong> بيع Put بـ Strike أدنى ضد الـ Back Long Put → يصبح Bear Put Spread<br>
+    النتيجة: تجمع Credit وتحدد Max Loss أكثر.
+    </div></div></div>
+
+    <div class="ca cy"><strong>💡 لماذا التحويل إلى Diagonal؟</strong><br>
+    عند الحركة القوية، Calendar يخسر لأن السعر ابتعد عن Strike.<br>
+    بالترحيل إلى Diagonal: تقلل Cost Basis + تضع Strike جديد قريب من السعر = فرصة تعافٍ أفضل.</div>
+  </div>
+
+  <!-- Scenario 3 -->
+  <div id="sc3" class="card hidden">
+    <div class="ct" style="color:var(--purple)">💥 السيناريو 3: IV Crush بعد Earnings</div>
+
+    <div class="ca cr" style="margin-bottom:14px">
+      ⚠️ <strong>هذا السيناريو للدخول المقصود فقط (IV Crush Play)</strong><br>
+      إذا دخلت صفقة عادية وصادفت Earnings → IV Crush يضرك (راجع اليونانيات).<br>
+      هذا السيناريو ينطبق فقط إذا دخلت <strong>قبل الإعلان بقصد الـ Crush</strong>.
+    </div>
+
+    <div class="step"><div class="sn">1</div><div class="sc2"><div class="st">بعد الإعلان مباشرة — راقب الـ Front</div>
+    <div class="sd">IV Crush = انهيار قيمة الـ Front بسرعة (كان غالياً بسبب IV مرتفع).<br>
+    اشترِ الـ Front بسعر رخيص جداً → أغلق الـ Spread واجمع الربح.<br>
+    <strong style="color:var(--green)">التوقيت: أغلق خلال ساعات من الإعلان — لا تنتظر أيام.</strong></div></div></div>
+
+    <div class="step"><div class="sn">2</div><div class="sc2"><div class="st">السعر بقي قريباً من Strike ✅</div>
+    <div class="sd">الوضع المثالي — Front انهار + السعر قريب = Spread يرتفع بقوة.<br>
+    أغلق الكامل وخذ الربح فوراً.</div></div></div>
+
+    <div class="step"><div class="sn">3</div><div class="sc2"><div class="st">السعر تحرك بعيداً عن Strike ⚠️</div>
+    <div class="sd">
+    الحركة تلغي فائدة الـ Crush جزئياً أو كلياً.<br>
+    📈 <strong>Call تحرك للأعلى كثيراً:</strong> أغلق الـ Front الرخيص + قيّم الـ Back — إذا Back في الربح أغلق الكل.<br>
+    📉 <strong>Put تحرك للأسفل كثيراً:</strong> نفس المنطق — أغلق الـ Front ثم قيّم الـ Back.<br>
+    إذا كان الـ Back خاسراً بأكثر من 50% من Debit → أغلق كل شيء ولا تنتظر.
+    </div></div></div>
+
+    <div class="ca cp"><strong>استراتيجية ALHARTHI في Earnings:</strong><br>
+    يفضّل <strong>Diagonal</strong> من البداية — يبيع Front بـ IV عالٍ ويشتري Back بـ IV منخفض + اتجاه.<br>
+    هذا يعطي حماية أكثر عند الحركة ويبقى مربحاً حتى لو تحرك السعر قليلاً.</div>
+  </div>
+</div>
+
+<!-- ═══════════════ PANEL 5: RULES ═══════════════ -->
+<div id="p-rules" class="panel">
+
+  <div class="ca cb" style="margin-bottom:18px;font-size:.88rem">
+    📌 <strong>القواعد مقسّمة حسب نوع الصفقة</strong> — اختر النوع لترى القواعد المناسبة:
+    <div class="tg" style="margin-top:10px" id="rules-mode">
+      <div class="tb on" onclick="switchRules('normal',this)">📊 صفقة عادية (Theta)</div>
+      <div class="tb" onclick="switchRules('crush',this)">💥 IV Crush / أخبار</div>
+    </div>
+  </div>
+
+  <!-- ══ قواعد الصفقة العادية ══ -->
+  <div id="rules-normal">
+    <div class="g2">
+      <div class="card">
+        <div class="ct" style="color:var(--red)">⛔ لا تفعل هذا أبداً</div>
+        <div class="ci"><div class="ci-icon ir">✗</div><div class="ci-txt"><div class="cit">السعر يبتعد كثيراً عن Strike</div><div class="cid">Spread يخسر → extrinsic value تختفي كلها</div></div></div>
+        <div class="ci"><div class="ci-icon ir">✗</div><div class="ci-txt"><div class="cit">IV ينخفض بعد الدخول</div><div class="cid">Net Vega موجب → IV↓ يضرك مباشرة (IV Crush = خطر)</div></div></div>
+        <div class="ci"><div class="ci-icon ir">✗</div><div class="ci-txt"><div class="cit">Position Sizing &gt; 2% من الحساب</div><div class="cid">Max Risk لكل صفقة = 1-2% من رأس المال</div></div></div>
+        <div class="ci"><div class="ci-icon ir">✗</div><div class="ci-txt"><div class="cit">الدخول قبل Earnings أو أخبار كبيرة</div><div class="cid">الحركة القوية + IV Crush يدمران الصفقة العادية</div></div></div>
+        <div class="ci"><div class="ci-icon ir">✗</div><div class="ci-txt"><div class="cit">الانتظار بعد DTE 21 في الـ Front</div><div class="cid">Gamma Explosion يؤذيك في الأيام الأخيرة</div></div></div>
+        <div class="ci"><div class="ci-icon ir">✗</div><div class="ci-txt"><div class="cit">مطاردة الخسارة بعد Max Loss</div><div class="cid">Defined Risk — اقبل الخسارة وانتقل</div></div></div>
+      </div>
+      <div class="card">
+        <div class="ct" style="color:var(--green)">✅ القواعد الذهبية</div>
+        <div class="ci"><div class="ci-icon ig">✓</div><div class="ci-txt"><div class="cit">ادخل فقط عند IV Rank ≤ 40%</div><div class="cid">منخفض → تتوقع ارتفاعه (Vega موجب يربح)</div></div></div>
+        <div class="ci"><div class="ci-icon ig">✓</div><div class="ci-txt"><div class="cit">Strike = ATM دائماً</div><div class="cid">أقوى نقطة للـ Theta وأفضل احتمال نجاح</div></div></div>
+        <div class="ci"><div class="ci-icon ig">✓</div><div class="ci-txt"><div class="cit">Net Debit ≤ 2% من سعر السهم</div><div class="cid">أقل ما يمكن → Max Loss محدود</div></div></div>
+        <div class="ci"><div class="ci-icon ig">✓</div><div class="ci-txt"><div class="cit">اخرج عند 10-25% ربح</div><div class="cid">لا تطمع — ALHARTHI ينصح 25% كهدف</div></div></div>
+        <div class="ci"><div class="ci-icon ig">✓</div><div class="ci-txt"><div class="cit">أغلق قبل DTE 7 في Front</div><div class="cid">تجنب Gamma Explosion — للصفقة العادية فقط</div></div></div>
+        <div class="ci"><div class="ci-icon ig">✓</div><div class="ci-txt"><div class="cit">Front DTE 30-45 يوم عند الدخول</div><div class="cid">منطقة Theta المثالية — لا قصير ولا طويل</div></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">📊 Probability of Success</div>
+      <div class="ca cy">متوسط حوالي <strong>45-50%</strong> — تحتاج السعر يبقى قريباً من Strike طوال الفترة.<br>Max Loss محدود ومعروف مسبقاً — ميزة مهمة.</div>
+      <div class="pb"><div class="pf" style="width:47%;background:linear-gradient(90deg,var(--yellow),var(--green))"></div></div>
+      <div style="display:flex;justify-content:space-between;color:var(--t3);font-size:.72rem;margin-top:4px"><span>0%</span><span style="color:var(--yellow)">47% (متوسط)</span><span>100%</span></div>
+    </div>
+    <div class="card">
+      <div class="ct">🔑 أهم قاعدتين عملياً</div>
+      <div class="g2">
+        <div class="ca cg"><strong>1. ادخل عند IV منخفض</strong><br>IV Rank &lt; 40% — حافز الربح الرئيسي. IV مرتفع → Vega موجب يؤذيك عند انخفاضه.</div>
+        <div class="ca cr"><strong>2. الحركة القوية = أكبر خطر</strong><br>السعر يبتعد عن Strike → Spread يفقد قيمته. Gamma سالب يعاقبك على كل حركة.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ قواعد IV Crush / Earnings ══ -->
+  <div id="rules-crush" class="hidden">
+    <div class="g2">
+      <div class="card">
+        <div class="ct" style="color:var(--red)">⛔ لا تفعل هذا في Earnings</div>
+        <div class="ci"><div class="ci-icon ir">✗</div><div class="ci-txt"><div class="cit">الدخول بعد الإعلان</div><div class="cid">IV انهار بالفعل — الفرصة انتهت، لا شيء تجمعه</div></div></div>
+        <div class="ci"><div class="ci-icon ir">✗</div><div class="ci-txt"><div class="cit">Back قريب الانتهاء مثل Front</div><div class="cid">يجب أن يكون Back أطول بكثير ليحتفظ بقيمته بعد Crush</div></div></div>
+        <div class="ci"><div class="ci-icon ir">✗</div><div class="ci-txt"><div class="cit">الانتظار أيام بعد الإعلان</div><div class="cid">اخرج خلال ساعات — IV Crush يعمل مرة واحدة فقط</div></div></div>
+        <div class="ci"><div class="ci-icon ir">✗</div><div class="ci-txt"><div class="cit">تجاهل اتجاه السعر بعد الخبر</div><div class="cid">الحركة القوية تلغي فائدة الـ Crush — أغلق فوراً إذا تحرك</div></div></div>
+        <div class="ci"><div class="ci-icon ir">✗</div><div class="ci-txt"><div class="cit">Position Sizing كبير في Earnings</div><div class="cid">المخاطرة أعلى — قلّل الحجم أكثر من الصفقة العادية</div></div></div>
+      </div>
+      <div class="card">
+        <div class="ct" style="color:var(--green)">✅ قواعد IV Crush Play</div>
+        <div class="ci"><div class="ci-icon ig">✓</div><div class="ci-txt"><div class="cit">ادخل قبل الإعلان بـ 1-3 أيام</div><div class="cid">IV مرتفع جداً في Front → ينهار بعد الخبر مباشرة</div></div></div>
+        <div class="ci"><div class="ci-icon ig">✓</div><div class="ci-txt"><div class="cit">Front DTE: 1-7 أيام (قريب جداً)</div><div class="cid">قصير مقصود — يحمل IV عالٍ وينهار بعد الخبر بسرعة</div></div></div>
+        <div class="ci"><div class="ci-icon ig">✓</div><div class="ci-txt"><div class="cit">Back DTE: 30+ يوم (أطول بكثير)</div><div class="cid">يحتفظ بقيمته بعد Crush — هذا الفارق هو الربح</div></div></div>
+        <div class="ci"><div class="ci-icon ig">✓</div><div class="ci-txt"><div class="cit">اخرج خلال ساعات من الإعلان</div><div class="cid">لا تنتظر — IV Crush يحدث مرة واحدة ثم تنتهي الفرصة</div></div></div>
+        <div class="ci"><div class="ci-icon ig">✓</div><div class="ci-txt"><div class="cit">Diagonal أفضل من Calendar النقي</div><div class="cid">ALHARTHI يفضّل Diagonal — دفاع أقوى عند الحركة</div></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">📊 Probability of Success — Earnings Play</div>
+      <div class="ca cp">يعتمد على <strong>سرعة IV Crush</strong> وبقاء السعر قريباً من Strike.<br>
+      إذا تحرك السعر بعيداً بعد الخبر → الربح يتلاشى بسرعة. اخرج فوراً عند الحركة.</div>
+      <div class="pb"><div class="pf" style="width:55%;background:linear-gradient(90deg,var(--purple),var(--blue))"></div></div>
+      <div style="display:flex;justify-content:space-between;color:var(--t3);font-size:.72rem;margin-top:4px"><span>0%</span><span style="color:var(--purple)">~55% (إذا بقي السعر قريباً)</span><span>100%</span></div>
+    </div>
+    <div class="card">
+      <div class="ct">🔑 أهم قاعدتين في Earnings Play</div>
+      <div class="g2">
+        <div class="ca cp"><strong>1. التوقيت هو كل شيء</strong><br>ادخل قبل الخبر — اخرج بعده مباشرة. كل ساعة تأخير بعد الإعلان تأكل ربحك.</div>
+        <div class="ca cy"><strong>2. راقب الحركة بعد الخبر</strong><br>السعر قريب من Strike ✅ → اخرج بربح.<br>السعر تحرك بعيداً ❌ → أغلق كل شيء فوراً بلا تردد.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ PANEL 6: DECISION ═══════════════ -->
+<div id="p-decision" class="panel">
+  <div class="card">
+    <div class="ct">🧠 محرك القرار الفوري — أرسل بياناتك واحصل على القرار</div>
+    <div class="ca cb">هذا القسم 9 من الخطة: أدخل بيانات صفقتك الحالية وسيعطيك القرار الدقيق — "ارحل إلى أي Strike؟" أو "أغلق" أو "اترك Back مفرداً".</div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="card">
+        <div class="ct">📥 بيانات الصفقة الحالية</div>
+
+        <div class="fg"><label>هدف الصفقة</label>
+          <div class="tg" id="d-goal">
+            <div class="tb on" onclick="tglD('d-goal',this,'normal')">📊 عادي (Theta)</div>
+            <div class="tb" onclick="tglD('d-goal',this,'crush')">💥 IV Crush / أخبار</div>
+          </div></div>
+
+        <div class="fg"><label>نوع الخيار</label>
+          <div class="tg" id="d-type">
+            <div class="tb" onclick="tglD('d-type',this,'call')">Call 📈</div>
+            <div class="tb" onclick="tglD('d-type',this,'put')">Put 📉</div>
+          </div></div>
+
+        <div class="fg"><label>السهم + السعر الحالي ($)</label>
+          <div class="g2">
+            <input id="d-tk" type="text" placeholder="ADBE" oninput="calcDec()">
+            <input id="d-px" type="number" placeholder="السعر الحالي" oninput="calcDec()">
+          </div></div>
+
+        <hr class="dv">
+        <div style="font-size:.85rem;color:var(--blue);font-weight:600;margin-bottom:9px">الساق الأمامية — Front (Short)</div>
+        <div class="g2">
+          <div class="fg"><label>Strike الأمامي</label><input id="d-fs" type="number" placeholder="290" oninput="calcDec()"></div>
+          <div class="fg"><label>DTE المتبقي (أيام)</label><input id="d-fd" type="number" placeholder="أيام" oninput="calcDec()"></div>
+        </div>
+        <div class="fg"><label>حالة الـ Front</label>
+          <select id="d-fst" onchange="calcDec()">
+            <option value="">-- اختر --</option>
+            <option value="alive">حي (نشط)</option>
+            <option value="near">قريب جداً من الانتهاء (&lt; 7 أيام)</option>
+            <option value="expired">انتهى (Expired)</option>
+          </select></div>
+
+        <hr class="dv">
+        <div style="font-size:.85rem;color:var(--green);font-weight:600;margin-bottom:9px">الساق الخلفية — Back (Long)</div>
+        <div class="g2">
+          <div class="fg"><label>Strike الخلفي</label><input id="d-bs" type="number" placeholder="290" oninput="calcDec()"></div>
+          <div class="fg"><label>DTE المتبقي (أيام)</label><input id="d-bd" type="number" placeholder="أيام" oninput="calcDec()"></div>
+        </div>
+
+        <hr class="dv">
+        <div style="font-size:.85rem;color:var(--t2);font-weight:600;margin-bottom:9px">P&amp;L الصفقة</div>
+        <div class="g2">
+          <div class="fg"><label>Net Debit الأصلي ($)</label><input id="d-od" type="number" placeholder="6.82" step="0.01" oninput="calcDec()"></div>
+          <div class="fg"><label>القيمة الحالية للـ Spread / Back ($)</label><input id="d-cv" type="number" placeholder="القيمة الآن" step="0.01" oninput="calcDec()"></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div id="dec-out">
+        <div class="card" style="text-align:center;padding:40px">
+          <div style="font-size:3rem;margin-bottom:14px">🧠</div>
+          <div style="color:var(--t3)">أدخل بيانات الصفقة على اليسار<br>للحصول على القرار الفوري</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PANEL 7: COMPARE ═══════════════ -->
+
+<!-- ═══════════════ PANEL 8: TRADE LOG ═══════════════ -->
+<div id="p-example" class="panel">
+
+  <!-- Add Trade Form -->
+  <div class="card">
+    <div class="ct">📒 سجل صفقاتي — Calendar Spread</div>
+    <div class="ca cb" style="margin-bottom:14px">سجّل كل صفقة تفتحها هنا. البيانات تُحفظ تلقائياً في المتصفح.</div>
+
+    <div class="g2">
+      <div class="fg"><label>السهم</label><input id="lg-tk" type="text" placeholder="ADBE" style="text-transform:uppercase"></div>
+      <div class="fg"><label>نوع الخيار</label>
+        <div class="tg" id="lg-type">
+          <div class="tb" onclick="tglLog('lg-type',this,'call')">Call 📈</div>
+          <div class="tb" onclick="tglLog('lg-type',this,'put')">Put 📉</div>
+        </div></div>
+    </div>
+
+    <div class="g3">
+      <div class="fg"><label>Strike</label><input id="lg-strike" type="number" placeholder="290"></div>
+      <div class="fg"><label>Net Debit ($)</label><input id="lg-debit" type="number" placeholder="6.82" step="0.01"></div>
+      <div class="fg"><label>تاريخ الدخول</label><input id="lg-date" type="date"></div>
+    </div>
+
+    <div class="g2">
+      <div class="fg"><label>Front انتهاء (تاريخ)</label><input id="lg-fexp" type="date"></div>
+      <div class="fg"><label>Back انتهاء (تاريخ)</label><input id="lg-bexp" type="date"></div>
+    </div>
+
+    <div class="fg"><label>ملاحظات (اختياري)</label>
+      <input id="lg-note" type="text" placeholder="سبب الدخول، الوضع، IV Rank..."></div>
+
+    <button class="btn-add" onclick="addTrade()">+ أضف الصفقة</button>
+    <div id="lg-err" style="color:var(--red);font-size:.85rem;margin-top:6px;display:none"></div>
+  </div>
+
+  <!-- Trade Table -->
+  <div class="card" style="margin-top:0">
+    <div class="ct" style="display:flex;justify-content:space-between;align-items:center">
+      <span>📋 الصفقات المسجلة</span>
+      <span id="lg-count" style="font-size:.8rem;color:var(--t3);font-weight:400"></span>
+    </div>
+    <div id="lg-table-wrap">
+      <div style="text-align:center;padding:30px;color:var(--t3)">لا توجد صفقات بعد — أضف أول صفقة أعلاه</div>
+    </div>
+  </div>
+
+  <!-- Selected Trade Detail -->
+  <div id="lg-detail" class="card hidden" style="margin-top:0">
+    <div class="ct" style="display:flex;justify-content:space-between;align-items:center">
+      <span>📊 تفاصيل الصفقة</span>
+      <button onclick="closeDet()" style="background:none;border:none;color:var(--t3);font-size:1.3rem;cursor:pointer;line-height:1;padding:0 4px" title="إغلاق">✕</button>
+    </div>
+    <div id="lg-detail-body"></div>
+  </div>
+
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+// ═══════ NAVIGATION ═══════
+function nav(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('on'));
+  document.getElementById('p-' + id).classList.add('on');
+  el.classList.add('on');
+}
+
+// ═══════ TOGGLE BUTTONS ═══════
+function tgl(gid, el, val) {
+  document.getElementById(gid).querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  el.dataset.val = val;
+  chkEntry();
+}
+function tgv(gid) {
+  const s = document.getElementById(gid).querySelector('.on');
+  return s ? (s.dataset.val || s.textContent.trim()) : null;
+}
+function tglD(gid, el, val) {
+  document.getElementById(gid).querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  el.dataset.val = val;
+  calcDec();
+}
+
+// ═══════ CHECK HELPERS ═══════
+function setC(id, st, badge, detail) {
+  const ic = document.getElementById('ic-' + id);
+  const bg = document.getElementById('bg-' + id);
+  const dt = document.getElementById('dt-' + id);
+  const icCls = { g:'ig', r:'ir', b:'ib', p:'ip' };
+  const icTxt = { g:'✓', r:'✗', b:'💥', p:'?' };
+  const bgCls = { g:'sg', r:'sr', b:'sb3', p:'sb2' };
+  ic.className = 'ci-icon ' + (icCls[st] || 'ip');
+  ic.textContent = icTxt[st] || '?';
+  bg.className = 'sb ' + (bgCls[st] || 'sb2');
+  bg.textContent = badge;
+  if (dt && detail) dt.textContent = detail;
+}
+
+// ═══════ ENTRY CHECKER ═══════
+function chkEntry() {
+  const iv = parseFloat(document.getElementById('e-iv').value);
+  const ou = document.getElementById('e-outlook').value;
+  const fs = parseFloat(document.getElementById('e-fs').value);
+  const fd = parseFloat(document.getElementById('e-fd').value);
+  const bs = parseFloat(document.getElementById('e-bs').value);
+  const bd = parseFloat(document.getElementById('e-bd').value);
+  const px = parseFloat(document.getElementById('e-price').value);
+  const db = parseFloat(document.getElementById('e-debit').value);
+  const ev = tgv('tg-ev');
+  let pass = 0;
+
+  // IV
+  if (!isNaN(iv)) {
+    if (iv <= 40) { setC('iv','g','✓ منخفض',`IV: ${iv}% — مناسب (≤40%)`); pass++; }
+    else { setC('iv','r','✗ مرتفع',`IV: ${iv}% — مرتفع! يجب ≤40%`); }
+  } else setC('iv','p','انتظار','المطلوب: IV Rank ≤ 40%');
+
+  // Outlook
+  if (ou) {
+    if (['neu','mbull','mbear'].includes(ou)) { setC('ou','g','✓ مناسب','النظرة مناسبة للـ Calendar Spread'); pass++; }
+    else { setC('ou','r','✗ قوي','نظرة قوية جداً — Calendar ليس المناسب'); }
+  } else setC('ou','p','انتظار','Neutral / Mildly Bullish أو Bearish');
+
+  // Front DTE
+  if (!isNaN(fd)) {
+    if (ev === 'crush') {
+      // IV Crush Play — DTE قصير مقصود
+      if (fd <= 14) { setC('fd','g','✓ IV Crush',`DTE ${fd} يوم — قصير مقصود للـ Earnings Play`); pass++; }
+      else { setC('fd','r','✗ طويل',`${fd} يوم — في Earnings Play يجب أن يكون Front قريب الانتهاء (1-14 يوم)`); }
+    } else {
+      if (fd >= 30 && fd <= 45) { setC('fd','g','✓ مثالي',`DTE الأمامي: ${fd} يوم`); pass++; }
+      else if (fd < 30) { setC('fd','r','✗ قصير',`${fd} يوم — قصير (يجب 30-45 في الصفقة العادية)`); }
+      else { setC('fd','r','✗ طويل',`${fd} يوم — طويل (يجب 30-45)`); }
+    }
+  } else setC('fd','p','انتظار', ev === 'crush' ? 'Front DTE: 1-14 يوم (قريب الانتهاء)' : 'Front DTE: 30-45 يوم');
+
+  // Back DTE
+  if (!isNaN(bd)) {
+    if (bd >= 60) { setC('bd','g','✓ مثالي',`DTE الخلفي: ${bd} يوم`); pass++; }
+    else { setC('bd','r','✗ قصير',`${bd} يوم — قصير (يجب 60-90+)`); }
+  } else setC('bd','p','انتظار','Back DTE: 60-90+ يوم');
+
+  // Strike vs Price
+  if (!isNaN(fs) && !isNaN(px)) {
+    const d = Math.abs(fs - px) / px * 100;
+    if (d <= 3) { setC('st','g','✓ ATM',`Strike ${fs} — ${d.toFixed(1)}% فرق (ATM)`); pass++; }
+    else if (d <= 7) { setC('st','g','✓ قريب',`Strike ${fs} — ${d.toFixed(1)}% فرق`); pass++; }
+    else { setC('st','r','✗ بعيد',`Strike ${fs} — ${d.toFixed(1)}% بعيد عن السعر`); }
+  } else setC('st','p','انتظار','أدخل Strike وسعر السهم');
+
+  // Debit %
+  if (!isNaN(db) && !isNaN(px) && px > 0) {
+    const p = db / px * 100;
+    if (p <= 2) { setC('db','g','✓ مقبول',`${db} = ${p.toFixed(2)}% من السعر`); pass++; }
+    else { setC('db','r','✗ غالي',`${db} = ${p.toFixed(2)}% — أعلى من 2%`); }
+  } else if (!isNaN(db)) setC('db','p','أدخل السعر','أدخل سعر السهم للحساب');
+  else setC('db','p','انتظار','Net Debit ≤ 2% من سعر السهم');
+
+  // Event
+  const evT = document.getElementById('dt-ev-t');
+  if (ev === 'no')  {
+    setC('ev','g','✓ آمن','لا أحداث — مناسب للـ Calendar');
+    if (evT) evT.textContent = 'الأحداث الكبيرة (Earnings)';
+    pass++;
+  } else if (ev === 'yes') {
+    setC('ev','r','⚠️ تجنب','أحداث كبيرة! استخدم Diagonal بدلاً أو انتظر');
+    if (evT) evT.textContent = 'الأحداث الكبيرة (Earnings)';
+  }
+  else if (ev === 'crush') {
+    setC('ev','b','💥 IV Crush Play','ادخل قبل الخبر — اخرج بعده مباشرة خلال ساعات');
+    const t = document.getElementById('dt-ev-t');
+    if (t) t.textContent = 'IV Crush Play — استراتيجية Earnings';
+    pass++;
+  }
+  else setC('ev','p','انتظار','هل هناك Earnings أو أخبار كبيرة؟');
+
+  // Same Strike
+  if (!isNaN(fs) && !isNaN(bs)) {
+    if (fs === bs) { setC('ss','g','✓ Calendar',`Strikes موحدة: ${fs}`); pass++; }
+    else { setC('ss','g','⚡ Diagonal',`Strikes مختلفة: ${fs}/${bs}`,''); pass++; }
+  } else setC('ss','p','انتظار','أدخل كلا الـ Strikes');
+
+  // Summary
+  if (!isNaN(db)) {
+    document.getElementById('sm-ml').textContent = `$${db.toFixed(2)}`;
+    document.getElementById('sm-t25').textContent = `$${(db*1.25).toFixed(2)}`;
+  }
+  if (!isNaN(db) && !isNaN(px) && px > 0) {
+    document.getElementById('sm-mp').textContent = `≈$${(db*3).toFixed(2)}`;
+    document.getElementById('sm-pct').textContent = `${(db/px*100).toFixed(2)}%`;
+  }
+
+  // Overall
+  const rb = document.getElementById('res-entry');
+  const rc = document.getElementById('res-entry-c');
+  rb.classList.remove('hidden','ok','er','wa','in');
+  const hasData = !isNaN(iv) || ou || !isNaN(fd);
+  if (hasData) {
+    if (pass >= 7) { rb.classList.add('ok'); rc.innerHTML = `<span style="font-size:1.05rem;font-weight:700;color:var(--green)">✅ الصفقة مؤهلة للدخول (${pass}/8)</span><br><span style="color:var(--t2);font-size:.85rem">جميع الشروط متحققة</span>`; }
+    else if (pass >= 5) { rb.classList.add('wa'); rc.innerHTML = `<span style="font-size:1.05rem;font-weight:700;color:var(--yellow)">⚠️ تحقق جزئي (${pass}/8)</span><br><span style="color:var(--t2);font-size:.85rem">راجع الشروط الحمراء</span>`; }
+    else { rb.classList.add('er'); rc.innerHTML = `<span style="font-size:1.05rem;font-weight:700;color:var(--red)">❌ لا تدخل (${pass}/8)</span><br><span style="color:var(--t2);font-size:.85rem">كثير من الشروط غير متحققة</span>`; }
+  }
+}
+
+// ═══════ EXIT CALCULATOR ═══════
+function calcExit() {
+  const d      = parseFloat(document.getElementById('ex-d').value);
+  const c      = parseFloat(document.getElementById('ex-c').value);
+  const dte    = parseFloat(document.getElementById('ex-dte').value);
+  const exGoal = tgv('ex-goal') || 'normal';
+  const exCrush = exGoal === 'crush';
+  if (isNaN(d)) return;
+
+  const p10 = d * 0.10, p25 = d * 0.25;
+  const t10 = d + p10, t25 = d + p25;           // القيمة المستهدفة = Debit + الربح
+  document.getElementById('exit-tbl').innerHTML =
+    `<tr><td>$${d.toFixed(2)}</td><td style="color:var(--green)">$${t10.toFixed(2)} (ربح $${p10.toFixed(2)})</td><td style="color:var(--green)">$${t25.toFixed(2)} (ربح $${p25.toFixed(2)})</td><td style="color:var(--red)">$0.00</td></tr>`;
+
+  const rb = document.getElementById('res-exit');
+  const rc = document.getElementById('res-exit-c');
+  rb.classList.remove('hidden','ok','er','wa','in');
+  let h = `<div style="margin-bottom:10px;font-weight:600">حساباتك:</div>`;
+  h += `<div>• هدف 10%: أغلق عندما تصل قيمة الـ Spread إلى <strong style="color:var(--green)">$${t10.toFixed(2)}</strong> (ربح $${p10.toFixed(2)})</div>`;
+  h += `<div>• هدف 25%: أغلق عندما تصل قيمة الـ Spread إلى <strong style="color:var(--green)">$${t25.toFixed(2)}</strong> (ربح $${p25.toFixed(2)})</div>`;
+  h += `<div>• Max Loss: <strong style="color:var(--red)">$${d.toFixed(2)}</strong> — لا تطارد</div>`;
+
+  if (!isNaN(c)) {
+    const pnl = c - d, pct = pnl / d * 100;
+    h += `<hr style="border-color:var(--border);margin:10px 0">`;
+    if (pnl >= 0) {
+      h += `<div style="color:var(--green)">📈 ربح: $${pnl.toFixed(2)} (+${pct.toFixed(1)}%)</div>`;
+      if (pct >= 10) { rb.classList.add('ok'); h += `<div style="margin-top:7px;font-weight:700;color:var(--green)">✅ اخرج الآن! تجاوزت هدف الربح</div>`; }
+      else rb.classList.add('in');
+    } else {
+      h += `<div style="color:var(--red)">📉 خسارة: $${pnl.toFixed(2)} (${pct.toFixed(1)}%)</div>`;
+      rb.classList.add('er');
+    }
+  } else rb.classList.add('in');
+
+  if (!isNaN(dte)) {
+    h += `<hr style="border-color:var(--border);margin:10px 0">`;
+    if (exCrush) {
+      // IV Crush Play — DTE قصير مقصود
+      if (dte <= 14) {
+        h += `<div style="margin-top:7px"><strong style="color:var(--purple)">💥 DTE ${dte} — IV Crush Zone ✅</strong><br>
+        <span style="color:var(--t2);font-size:.83rem">DTE قصير مقصود — Front بـ IV عالٍ الآن.<br>
+        بعد الإعلان مباشرة: أغلق Front (سيكون رخيصاً).</span></div>`;
+      } else {
+        h += `<div style="margin-top:7px"><strong style="color:var(--yellow)">⏰ DTE ${dte} — انتظر حتى يقترب الإعلان</strong></div>`;
+      }
+    } else {
+      // Normal play
+      if (dte <= 7) h += `<div style="margin-top:7px"><strong style="color:var(--red)">⚠️ DTE ${dte} — أغلق الآن! خطر Gamma</strong></div>`;
+      else if (dte <= 21) h += `<div style="margin-top:7px"><strong style="color:var(--yellow)">⏰ DTE ${dte} — في نطاق الخروج (21 يوم)</strong></div>`;
+      else h += `<div style="margin-top:7px;color:var(--t3)">DTE ${dte} — لا زال وقت</div>`;
+    }
+  }
+  rc.innerHTML = h;
+}
+
+// ═══════ RULES MODE SWITCH ═══════
+function switchRules(mode, el) {
+  document.querySelectorAll('#rules-mode .tb').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('rules-normal').classList.toggle('hidden', mode !== 'normal');
+  document.getElementById('rules-crush').classList.toggle('hidden', mode !== 'crush');
+}
+
+// ═══════ SCENARIO TABS ═══════
+function selSc(n, el) {
+  document.querySelectorAll('.sc').forEach(s => s.classList.remove('on'));
+  el.classList.add('on');
+  ['sc1','sc2','sc3'].forEach((id, i) => {
+    const el2 = document.getElementById(id);
+    el2.classList.toggle('hidden', i + 1 !== n);
+  });
+}
+
+// ═══════ DECISION ENGINE ═══════
+function calcDec() {
+  const tk = document.getElementById('d-tk').value.toUpperCase();
+  const px = parseFloat(document.getElementById('d-px').value);
+  const fs = parseFloat(document.getElementById('d-fs').value);
+  const fd = parseFloat(document.getElementById('d-fd').value);
+  const fst = document.getElementById('d-fst').value;
+  const bs = parseFloat(document.getElementById('d-bs').value);
+  const bd = parseFloat(document.getElementById('d-bd').value);
+  const od = parseFloat(document.getElementById('d-od').value);
+  const cv = parseFloat(document.getElementById('d-cv').value);
+  const optType  = tgv('d-type');  // 'call', 'put', or null
+  const goal     = tgv('d-goal') || 'normal'; // 'normal' or 'crush'
+  const isCrush  = goal === 'crush';
+  const out = document.getElementById('dec-out');
+
+  if (!tk || isNaN(px) || isNaN(od)) {
+    out.innerHTML = `<div class="card" style="text-align:center;padding:40px"><div style="font-size:3rem;margin-bottom:14px">🧠</div><div style="color:var(--t3)">أدخل السهم + السعر الحالي + Net Debit الأصلي</div></div>`;
+    return;
+  }
+
+  const isCall = optType === 'call';
+  const isPut  = optType === 'put';
+  const typeLabel = isCall ? 'Call 📈' : isPut ? 'Put 📉' : '—';
+  const typeBadge = optType
+    ? `<span style="background:${isCall?'rgba(74,222,128,.15)':'rgba(248,113,113,.15)'};color:${isCall?'var(--green)':'var(--red)'};padding:2px 10px;border-radius:20px;font-size:.8rem;font-weight:700;margin-right:8px">${typeLabel}</span>`
+    : `<span style="background:rgba(255,255,255,.07);color:var(--t3);padding:2px 10px;border-radius:20px;font-size:.8rem">نوع غير محدد</span>`;
+
+  const pnl = !isNaN(cv) ? cv - od : null;
+  const pct = pnl !== null ? pnl / od * 100 : null;
+
+  // Metrics card
+  let h = `<div class="card"><div class="ct">📊 ${tk} ${typeBadge}— ملخص</div><div class="g2">`;
+  h += `<div class="mc"><div class="ml">Net Debit الأصلي</div><div class="mv" style="color:var(--blue)">$${od.toFixed(2)}</div><div class="ms">Max Loss</div></div>`;
+  h += `<div class="mc"><div class="ml">سعر السهم</div><div class="mv" style="color:var(--yellow)">$${px.toFixed(2)}</div><div class="ms">الحالي</div></div>`;
+  if (pnl !== null) {
+    h += `<div class="mc"><div class="ml">P&L الحالي</div><div class="mv" style="color:${pnl>=0?'var(--green)':'var(--red)'}">${pnl>=0?'+':''}$${pnl.toFixed(2)}</div><div class="ms">${pct>=0?'+':''}${pct.toFixed(1)}%</div></div>`;
+  }
+  h += `</div></div>`;
+
+  // Decision logic
+  let dec = '';
+
+  // ── Helper: roll direction note based on type ──
+  const rollNote = isCall
+    ? 'Call Calendar: ارحل إلى Strike أعلى عندما يرتفع السعر.'
+    : isPut
+      ? 'Put Calendar: ارحل إلى Strike أدنى عندما ينخفض السعر.'
+      : '';
+
+  // ── Helper: vertical spread defensive note ──
+  const vertNote = isCall
+    ? `بيع Call Strike ${!isNaN(bs)?bs+10:'أعلى'} ضد الـ Back Long Call → يصبح Bull Call Spread → تجمع Credit وتقلل Max Loss.`
+    : isPut
+      ? `بيع Put Strike ${!isNaN(bs)?bs-10:'أدنى'} ضد الـ Back Long Put → يصبح Bear Put Spread → تجمع Credit وتقلل Max Loss.`
+      : `بيع Strike قريب ضد الـ Back → يصبح Vertical Spread → تجمع Credit وتقلل Max Loss.`;
+
+  if (pct !== null && pct >= 10) {
+    // Take profit
+    dec = `<div class="bd bd-hold"><div class="bd-icon">💰</div><div class="bd-title">أغلق وخذ الربح الآن!</div><div class="bd-desc">ربحت <strong>${pct.toFixed(1)}%</strong> = $${pnl.toFixed(2)}<br>ALHARTHI تنصح بالخروج عند 10-25%.<br><br><strong>الخروج الآن هو القرار الصحيح ✅</strong></div></div>`;
+  } else if (fst === 'expired') {
+    // Front expired → leave back naked
+    const near = !isNaN(fs) && Math.abs(px - fs) / px < 0.05;
+    const backType = isCall ? 'Long Call' : isPut ? 'Long Put' : 'Long naked';
+    dec = `<div class="bd bd-naked"><div class="bd-icon">🎯</div><div class="bd-title">الـ Front انتهى — اترك الـ Back مفرداً</div>
+    <div class="bd-desc">لا ترحّل (الـ Front ميت).<br>الـ Back (${!isNaN(bs)?bs:'---'}${!isNaN(bd)?', DTE '+bd:''}) يبقى كـ ${backType}.<br><br>
+    ${near?'<strong style="color:var(--green)">✓ السعر قريب من Strike — فرصة تعافٍ جيدة</strong>':'<strong style="color:var(--yellow)">⚠️ السعر بعيد — راقب التعافي</strong>'}<br><br>
+    <strong>أغلق الـ Back إذا خسر $${(od*0.65).toFixed(2)} (50-70% من الـ Debit)</strong></div></div>
+    <div class="ca cb" style="margin-top:12px"><strong>خيار دفاعي:</strong> ${vertNote}</div>`;
+  } else if (isCrush && fst === 'alive') {
+    // IV Crush Play — waiting for the event
+    const daysNote = !isNaN(fd) ? `<strong style="color:var(--yellow)">${fd} أيام</strong> حتى انتهاء الـ Front` : 'الـ Front نشط';
+    dec = `<div class="bd bd-roll" style="border-color:var(--purple);background:rgba(188,140,255,.1)">
+    <div class="bd-icon">💥</div>
+    <div class="bd-title">IV Crush Play — انتظر الخبر</div>
+    <div class="bd-desc">${daysNote}<br><br>
+    الـ Front بـ IV عالٍ الآن ← ينهار فور الإعلان<br>
+    <strong style="color:var(--green)">✅ هذا هو القصد — DTE قصير = طبيعي في هذه الاستراتيجية</strong><br><br>
+    <strong>📌 الخطة:</strong><br>
+    1️⃣ انتظر الإعلان<br>
+    2️⃣ بعد الخبر مباشرة: أغلق الـ Front (سيكون رخيصاً جداً بعد IV Crush)<br>
+    3️⃣ الـ Back يبقى إذا بقي السعر قريباً أو أغلقه للربح<br><br>
+    <strong style="color:var(--yellow)">⚠️ تحذير:</strong> إذا تحرك السعر بعيداً عن Strike → أغلق كل شيء فوراً
+    </div></div>
+    <div class="ca cp" style="margin-top:12px">
+      <strong>ALHARTHI يفضّل Diagonal في Earnings</strong> — يبيع Front بـ IV عالٍ ويشتري Back منخفض IV + اتجاه.<br>
+      إذا لم تكن تعرف الاتجاه → Calendar النقي مناسب لكن المخاطرة أعلى.
+    </div>`;
+  } else if (!isCrush && (fst === 'near' || (!isNaN(fd) && fd <= 7))) {
+    // Normal play — near expiry → Gamma warning
+    dec = `<div class="bd bd-close"><div class="bd-icon">⏰</div><div class="bd-title">أغلق — خطر Gamma!</div>
+    <div class="bd-desc">DTE ${!isNaN(fd)?fd:'< 7'} أيام — قريب جداً من الانتهاء.<br>ALHARTHI تنصح بالإغلاق قبل 5-7 أيام.<br><br>
+    <strong>أغلق الـ Spread الآن بأي سعر متاح.</strong><br><br>
+    <em style="color:var(--t3);font-size:.85rem">💡 إذا كانت هذه صفقة IV Crush / أخبار — غيّر "هدف الصفقة" في الأعلى</em>
+    </div></div>`;
+  } else if (!isNaN(fs) && !isNaN(px)) {
+    const diff = Math.abs(px - fs);
+    const diffPct = diff / px * 100;
+    if (diffPct > 8 && fst === 'alive') {
+      // Determine roll direction based on option type
+      let sugStrike, dir, rollDir, rollWarning = '';
+      if (isCall) {
+        sugStrike = Math.round(px / 5) * 5;
+        dir = px > fs ? 'ارتفع' : 'انخفض';
+        rollDir = px > fs ? '↑' : '↓';
+        if (isPut && px > fs) rollWarning = `<br><strong style="color:var(--yellow)">⚠️ تحذير Put: السعر ارتفع فوق Strike — الـ Put قد تكون خارج النطاق (OTM). راقب جيداً.</strong>`;
+      } else if (isPut) {
+        sugStrike = Math.round(px / 5) * 5;
+        dir = px < fs ? 'انخفض' : 'ارتفع';
+        rollDir = px < fs ? '↓' : '↑';
+        if (px > fs) rollWarning = `<br><strong style="color:var(--yellow)">⚠️ تحذير Put: السعر ارتفع فوق Strike — الـ Put خرجت من المنطقة. فكّر بإغلاق الصفقة.</strong>`;
+      } else {
+        sugStrike = Math.round(px / 5) * 5;
+        dir = px > fs ? 'ارتفع' : 'انخفض';
+        rollDir = px > fs ? '↑' : '↓';
+      }
+      dec = `<div class="bd bd-roll"><div class="bd-icon">🔄</div><div class="bd-title">ارحل الـ Short Leg ${rollDir}</div>
+      <div class="bd-desc">السعر ${dir} كثيراً: ${fs} → ${px.toFixed(0)}<br>
+      ارحل الـ Short من <strong>${fs}</strong> إلى حوالي <strong>${sugStrike}</strong><br><br>
+      ${rollNote ? `<em style="color:var(--t3);font-size:.88rem">${rollNote}</em><br><br>` : ''}
+      ✅ تجمع Credit إضافي → تقلل Cost Basis<br>✅ يصبح Diagonal Calendar أقوى${rollWarning}</div></div>
+      <div class="ca cb" style="margin-top:12px"><strong>كيف ترحّل:</strong><br>
+      1. أغلق Short ${fs} الحالي (ادفع Premium)<br>
+      2. افتح Short ${sugStrike} جديد (اجمع Premium أعلى)<br>
+      3. الفرق = Credit صافي يخفض Cost Basis من $${od.toFixed(2)}</div>`;
+    } else if (fst === 'alive') {
+      // Type-specific hold note
+      const holdNote = isCall
+        ? 'Call Calendar يستفيد من بقاء السعر تحت Strike أو عنده.'
+        : isPut
+          ? 'Put Calendar يستفيد من بقاء السعر فوق Strike أو عنده.'
+          : '';
+      dec = `<div class="bd bd-hold"><div class="bd-icon">✅</div><div class="bd-title">احتفظ — السعر قريب</div>
+      <div class="bd-desc">السعر $${px.toFixed(2)} — ${diffPct.toFixed(1)}% من Strike ${fs}<br>
+      ${holdNote ? `<em style="color:var(--t3);font-size:.88rem">${holdNote}</em><br>` : ''}
+      Theta يعمل لصالحك. اخرج عند:<br>
+      • ربح 10%: Spread بقيمة $${(od*1.10).toFixed(2)} | ربح 25%: $${(od*1.25).toFixed(2)}<br>
+      • DTE الأمامي &lt; 21 يوم</div></div>`;
+    } else {
+      dec = `<div class="ca cy">أدخل حالة الـ Front (حي/انتهى/قريب) لتحديد القرار.</div>`;
+    }
+  } else {
+    dec = `<div class="ca cy">أدخل الـ Strikes وحالة الـ Front لتحديد القرار الدقيق.</div>`;
+  }
+
+  h += `<div class="card"><div class="ct">🎯 القرار الفوري</div>${dec}</div>`;
+
+  // Exit levels
+  h += `<div class="card"><div class="ct">📏 مستويات الخروج</div><table><tbody>
+    <tr><td>هدف الربح 10%</td><td style="color:var(--green)">قيمة الـ Spread = $${(od*1.10).toFixed(2)} (ربح $${(od*0.1).toFixed(2)})</td></tr>
+    <tr><td>هدف الربح 25%</td><td style="color:var(--green)">قيمة الـ Spread = $${(od*1.25).toFixed(2)} (ربح $${(od*0.25).toFixed(2)})</td></tr>
+    <tr><td>Max Loss (لا تطارد)</td><td style="color:var(--red)">Spread تساوي $0 — خسارة $${od.toFixed(2)}</td></tr>
+    <tr><td>وقف خسارة Back</td><td style="color:var(--red)">أغلق Back إذا فقد 50-70% من قيمته</td></tr>
+    <tr><td>خروج زمني</td><td>Front DTE &lt; 7 أيام → أغلق فوراً</td></tr>
+  </tbody></table></div>`;
+
+  // ── أزرار المشاركة ──
+  const decText = buildShareText(tk, optType, goal, px, fs, fd, od, pnl, pct, dec);
+  const titleMatch = dec.match(/bd-title[^>]*>([^<]+)</);
+  const decTitle   = titleMatch ? titleMatch[1].trim() : null;
+
+  out.innerHTML = h;
+  window._decShareText = decText;
+  window._cardData = { tk, optType, goal, px, fs, fd, od, pnl, pct, decTitle };
+}
+
+// ══════════════════════════════════════════════════════
+//  TRADE CARD — Canvas image generator
+// ══════════════════════════════════════════════════════
+function _rrect(ctx, x, y, w, h, r, fill, stroke, lw) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+  if (fill)   { ctx.fillStyle   = fill;   ctx.fill();   }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw || 1; ctx.stroke(); }
+}
+
+function generateTradeCard(data) {
+  // ─ colours ─
+  const BG     = '#0d1117', BDR = '#30363d';
+  const BLUE   = '#58a6ff', GREEN = '#3fb950', YELLOW = '#e3b341';
+  const RED    = '#f85149', PURPLE = '#bc8cff', TG = '#29a8e0';
+  const T1     = '#e6edf3', T2 = '#8b949e';
+  const f = (w, s) => `${w} ${s}px "Noto Sans Arabic","Segoe UI",Arial,sans-serif`;
+
+  // ─ size (dynamic height) ─
+  const W = 520, PAD = 28;
+  let rowCount = 0;
+  if (!isNaN(data.px) && data.px)              rowCount++;
+  if (!isNaN(data.fs) && data.fs !== undefined) rowCount++;
+  if (!isNaN(data.fd) && data.fd !== undefined) rowCount++;
+  rowCount += 3; // debit + 10% + 25%
+  if (data.pnl !== null && data.pnl !== undefined) rowCount++;
+  const H = 100                           // header
+          + (data.goal ? 46 : 0)          // goal badge
+          + rowCount * 29 + 24            // rows + dividers
+          + (data.decTitle ? 68 : 0)      // decision box
+          + 58;                           // footer
+
+  const SC = 2; // retina
+  const c = document.createElement('canvas');
+  c.width = W * SC; c.height = H * SC;
+  c.style.width = W + 'px'; c.style.height = H + 'px';
+  const ctx = c.getContext('2d');
+  ctx.scale(SC, SC);
+  const CX = W / 2;
+
+  // Background + border
+  ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+  _rrect(ctx, 1, 1, W - 2, H - 2, 14, null, BDR, 1);
+
+  // ── Header gradient ──
+  const hg = ctx.createLinearGradient(0, 0, W, 0);
+  hg.addColorStop(0, '#1c2e4a'); hg.addColorStop(1, '#162032');
+  _rrect(ctx, 0, 0, W, 92, 14, hg);
+
+  ctx.direction = 'rtl'; ctx.textAlign = 'center';
+  ctx.fillStyle = YELLOW; ctx.font = f(700, 30);
+  ctx.fillText(data.tk || '—', CX, 42);
+
+  ctx.fillStyle = T2; ctx.font = f(400, 12);
+  ctx.fillText('Long Calendar Spread', CX, 62);
+
+  const tColor = data.optType === 'call' ? GREEN : data.optType === 'put' ? RED : T2;
+  const tText  = data.optType === 'call' ? '📈 Call' : data.optType === 'put' ? '📉 Put' : '';
+  if (tText) { ctx.fillStyle = tColor; ctx.font = f(600, 13); ctx.fillText(tText, CX, 82); }
+
+  let y = 108;
+
+  // ── Goal badge ──
+  if (data.goal) {
+    const isC = data.goal === 'crush';
+    const gC  = isC ? PURPLE : BLUE;
+    _rrect(ctx, PAD, y, W - PAD * 2, 30, 8,
+           isC ? 'rgba(188,140,255,.2)' : 'rgba(88,166,255,.15)', gC, 1);
+    ctx.fillStyle = gC; ctx.font = f(700, 13);
+    ctx.fillText(isC ? '💥 IV Crush Play' : '📊 Theta Play', CX, y + 20);
+    y += 44;
+  }
+
+  // ── Helpers ──
+  const divider = () => {
+    ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y);
+    ctx.strokeStyle = BDR; ctx.lineWidth = 0.5; ctx.stroke();
+    y += 12;
+  };
+  const row = (label, value, vc) => {
+    ctx.direction = 'rtl'; ctx.textAlign = 'right';
+    ctx.fillStyle = T2; ctx.font = f(400, 13);
+    ctx.fillText(label, W - PAD - 4, y);
+    ctx.direction = 'ltr'; ctx.textAlign = 'left';
+    ctx.fillStyle = vc || T1; ctx.font = f(600, 14);
+    ctx.fillText(value, PAD + 4, y);
+    y += 28;
+  };
+
+  // ── Trade data rows ──
+  if (!isNaN(data.px) && data.px)               row('سعر السهم', '$' + data.px.toFixed(2));
+  if (!isNaN(data.fs) && data.fs !== undefined)  row('Strike',    String(data.fs));
+  if (!isNaN(data.fd) && data.fd !== undefined)  row('DTE',       data.fd + ' يوم');
+  divider();
+
+  const debit = (data.eff !== undefined && !isNaN(data.eff)) ? data.eff : data.od;
+  if (!isNaN(debit) && debit) {
+    row('Net Debit', '$' + debit.toFixed(2));
+    row('هدف 10%  ➜', '$' + (debit * 1.10).toFixed(2), YELLOW);
+    row('هدف 25%  ➜', '$' + (debit * 1.25).toFixed(2), GREEN);
+  }
+  if (data.pnl !== null && data.pnl !== undefined) {
+    const ps = data.pnl >= 0 ? '+' : '';
+    const pt = data.pct !== null ? ` (${data.pct >= 0 ? '+' : ''}${data.pct.toFixed(1)}%)` : '';
+    row('P&L', ps + '$' + data.pnl.toFixed(2) + pt, data.pnl >= 0 ? GREEN : RED);
+  }
+
+  // ── Decision box ──
+  if (data.decTitle) {
+    divider();
+    _rrect(ctx, PAD, y, W - PAD * 2, 52, 10, 'rgba(88,166,255,.1)', BLUE, 1);
+    ctx.direction = 'rtl'; ctx.textAlign = 'right';
+    ctx.fillStyle = T2; ctx.font = f(400, 11);
+    ctx.fillText('🧠 القرار', W - PAD - 8, y + 16);
+    ctx.fillStyle = T1; ctx.font = f(700, 13);
+    let dt = data.decTitle;
+    if (ctx.measureText(dt).width > W - PAD * 2 - 20) {
+      while (ctx.measureText(dt + '…').width > W - PAD * 2 - 20 && dt.length > 4) dt = dt.slice(0, -1);
+      dt += '…';
+    }
+    ctx.fillText(dt, W - PAD - 8, y + 38);
+    y += 64;
+  }
+
+  // ── Footer ──
+  y += 6;
+  ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y);
+  ctx.strokeStyle = BDR; ctx.lineWidth = 0.5; ctx.stroke();
+  y += 20;
+
+  ctx.direction = 'ltr'; ctx.textAlign = 'left';
+  ctx.fillStyle = TG; ctx.font = f(700, 13);
+  ctx.fillText('@Elite_trade10', PAD + 4, y);
+
+  ctx.direction = 'rtl'; ctx.textAlign = 'right';
+  ctx.fillStyle = T2; ctx.font = f(600, 12);
+  ctx.fillText('📡 via ALHARTHI', W - PAD - 4, y);
+
+  return c;
+}
+
+function showCardModal(canvas, filename) {
+  const old = document.getElementById('card-modal');
+  if (old) old.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'card-modal';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;cursor:pointer';
+  overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+
+  const img = document.createElement('img');
+  img.src = canvas.toDataURL('image/png');
+  img.style.cssText = 'max-width:min(520px,94vw);border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,.7);cursor:default';
+  img.onclick = e => e.stopPropagation();
+
+  const hint = document.createElement('div');
+  hint.style.cssText = 'color:#8b949e;font-size:.8rem;text-align:center';
+  hint.textContent = '💡 في الجوال: اضغط مطولاً على الصورة للحفظ';
+
+  const btns = document.createElement('div');
+  btns.style.cssText = 'display:flex;gap:12px;flex-wrap:wrap;justify-content:center';
+
+  const dl = document.createElement('a');
+  dl.href = canvas.toDataURL('image/png');
+  dl.download = filename || 'alharthi-trade.png';
+  dl.innerHTML = '⬇️ حمّل الصورة';
+  dl.style.cssText = 'background:#58a6ff;color:#fff;border-radius:8px;padding:11px 22px;font-size:.9rem;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block';
+
+  const cl = document.createElement('button');
+  cl.textContent = '✕ إغلاق';
+  cl.style.cssText = 'background:rgba(255,255,255,.08);color:#8b949e;border:1px solid #30363d;border-radius:8px;padding:11px 22px;font-size:.9rem;cursor:pointer';
+  cl.onclick = () => overlay.remove();
+
+  btns.append(dl, cl);
+  overlay.append(img, hint, btns);
+  document.body.appendChild(overlay);
+}
+
+function showDecCard() {
+  const d = window._cardData;
+  if (!d) return;
+  showCardModal(generateTradeCard(d), (d.tk || 'trade') + '-calendar.png');
+}
+
+function showTradeCard(id) {
+  const t = getTrades().find(x => x.id === id);
+  if (!t) return;
+  const eff = effectiveDebit(t);
+  const isClosed = t.status === 'profit' || t.status === 'closed';
+  const pnl = isClosed && t.closePrice !== null ? t.closePrice - eff : null;
+  const pct = pnl !== null && eff > 0 ? pnl / eff * 100 : null;
+  showCardModal(generateTradeCard({
+    tk: t.tk, optType: t.optType, goal: null,
+    px: NaN, fs: t.strike, fd: NaN,
+    od: t.debit, eff, pnl, pct, decTitle: null
+  }), t.tk + '-trade.png');
+}
+
+// ══════════════════════════════════════════════════════
+function buildShareText(tk, optType, goal, px, fs, fd, od, pnl, pct, decHtml) {
+  const typeEmoji = optType === 'call' ? '📈 Call' : optType === 'put' ? '📉 Put' : '';
+  const goalLbl  = goal === 'crush' ? '💥 IV Crush' : '📊 Theta Play';
+  const L = '\u200E'; // LTR mark — يُجبر الأرقام على الظهور بالإنجليزية في التلجرام
+  const sep = '─────────────────';
+  const titleMatch = decHtml.match(/bd-title[^>]*>([^<]+)</);
+  const decTitle = titleMatch ? titleMatch[1].trim() : '—';
+  const lines = [];
+  lines.push(`📊 Long Calendar Spread`);
+  lines.push(`${tk}  ${typeEmoji}`);
+  lines.push(sep);
+  lines.push(goalLbl);
+  lines.push(`سعر السهم:  ${L}$${!isNaN(px) ? px.toFixed(2) : '—'}`);
+  lines.push(`Strike:  ${L}${!isNaN(fs) ? fs : '—'}    DTE:  ${L}${!isNaN(fd) ? fd : '—'}`);
+  lines.push(sep);
+  lines.push(`Net Debit:  ${L}$${!isNaN(od) ? od.toFixed(2) : '—'}`);
+  if (pnl !== null) {
+    lines.push(`P&L:  ${L}${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}  (${L}${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%)`);
+  }
+  lines.push(`🎯 هدف 25%:  ${L}$${!isNaN(od) ? (od * 1.25).toFixed(2) : '—'}`);
+  lines.push(sep);
+  lines.push(`🧠 القرار: ${decTitle}`);
+  lines.push(sep);
+  lines.push(`📡 via ALHARTHI`);
+  lines.push(`@Elite_trade10`);
+  return lines.join('\n');
+}
+
+function copyDec() {
+  const txt = window._decShareText || '';
+  if (!txt) return;
+  navigator.clipboard.writeText(txt).then(() => {
+    const btn = document.getElementById('copy-dec-btn');
+    if (btn) { btn.textContent = '✅ تم النسخ!'; setTimeout(() => { btn.textContent = '📋 انسخ القرار'; }, 2000); }
+  }).catch(() => {
+    // fallback
+    const ta = document.getElementById('dec-copy-area');
+    if (ta) { ta.style.position = 'static'; ta.select(); document.execCommand('copy'); ta.style.position = 'absolute'; }
+  });
+}
+
+// ═══════ TRADE LOG ═══════
+const LS_KEY = 'alharthi_cal_trades';
+let currentViewId = null;
+
+function getTrades() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch(e) { return []; }
+}
+function saveTrades(arr) {
+  localStorage.setItem(LS_KEY, JSON.stringify(arr));
+}
+
+function tglLog(gid, el, val) {
+  document.getElementById(gid).querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  el.dataset.val = val;
+}
+
+function addTrade() {
+  const err = document.getElementById('lg-err');
+  err.style.display = 'none';
+
+  const tk     = document.getElementById('lg-tk').value.trim().toUpperCase();
+  const debit  = parseFloat(document.getElementById('lg-debit').value);
+  const strike = parseFloat(document.getElementById('lg-strike').value);
+  const date   = document.getElementById('lg-date').value;
+  const fexp   = document.getElementById('lg-fexp').value;
+  const bexp   = document.getElementById('lg-bexp').value;
+  const note   = document.getElementById('lg-note').value.trim();
+  const optType = tgv('lg-type');
+
+  if (!tk || isNaN(debit) || debit <= 0 || isNaN(strike) || !date) {
+    err.textContent = '⚠️ أدخل على الأقل: السهم، Strike، Net Debit (أكبر من 0)، وتاريخ الدخول.';
+    err.style.display = 'block';
+    return;
+  }
+
+  const trades = getTrades();
+  trades.unshift({
+    id: Date.now(),
+    tk, optType, strike, debit, date, fexp, bexp, note,
+    status: 'open', closePrice: null, closeDate: null
+  });
+  saveTrades(trades);
+
+  // Reset form
+  ['lg-tk','lg-debit','lg-strike','lg-date','lg-fexp','lg-bexp','lg-note'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('lg-type').querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
+
+  renderLog();
+}
+
+function effectiveDebit(t) {
+  const totalCredit = (t.rolls || []).reduce((s, r) => s + (r.credit || 0), 0);
+  return Math.max(0, t.debit - totalCredit);
+}
+
+function deleteTrade(id) {
+  if (!confirm('حذف هذه الصفقة نهائياً؟')) return;
+  saveTrades(getTrades().filter(x => x.id !== id));
+  closeDet();
+  renderLog();
+}
+
+function showAction(id, type) {
+  const t = getTrades().find(x => x.id === id);
+  if (!t) return;
+  const fd = document.getElementById('lg-action-form');
+  const eff = effectiveDebit(t);
+  const titles = { close:'🔒 إغلاق الصفقة', roll:'🔄 ترحيل الـ Front', naked:'🎯 Front انتهى — Back مفرد', 'edit-close':'✏️ تعديل سعر الإغلاق' };
+  let form = '';
+
+  if (type === 'close') {
+    const lbl = t.status === 'back-naked' ? 'سعر إغلاق الـ Back ($)' : 'سعر إغلاق الـ Spread ($)';
+    form = `<div class="fg"><label>${lbl}</label>
+      <input id="af-price" type="number" step="0.01" placeholder="0.00"></div>
+      <div style="color:var(--t3);font-size:.82rem;margin-bottom:10px">
+        Cost Basis الحالي: $${eff.toFixed(2)} |
+        هدف 10%: $${(eff*1.10).toFixed(2)} | هدف 25%: $${(eff*1.25).toFixed(2)}
+      </div>`;
+  } else if (type === 'roll') {
+    form = `<div style="color:var(--blue);font-size:.85rem;margin-bottom:10px;font-weight:600">
+        Cost Basis الحالي: $${eff.toFixed(2)} — سيتقلص بعد الـ Credit الصافي</div>
+      <div class="ca cb" style="margin-bottom:12px;font-size:.83rem;line-height:1.8">
+        🔄 <strong>كيف يعمل الترحيل:</strong><br>
+        تُغلق Front القديم (تجمع) ← تفتح Front جديد (تدفع) ← الفرق = Credit يقلل Cost Basis
+      </div>
+      <div class="g2">
+        <div class="fg">
+          <label>قيمة Front الحالي <span style="color:var(--green)">(ستجمعه)</span></label>
+          <input id="af-close-old" type="number" step="0.01" placeholder="مثال: 2.50" oninput="calcRollCredit()">
+        </div>
+        <div class="fg">
+          <label>قيمة Front الجديد <span style="color:var(--red)">(ستدفعه)</span></label>
+          <input id="af-open-new" type="number" step="0.01" placeholder="مثال: 1.80" oninput="calcRollCredit()">
+        </div>
+      </div>
+      <div id="roll-credit-display" style="display:none;padding:10px 14px;border-radius:8px;margin-bottom:12px;font-weight:700;text-align:center;font-size:1rem"></div>
+      <div class="g2">
+        <div class="fg"><label>Strike الجديد</label><input id="af-strike" type="number" placeholder="${t.strike}"></div>
+        <div class="fg"><label>Front الجديد — تاريخ الانتهاء</label><input id="af-fexp" type="date" value="${t.fexp||''}"></div>
+      </div>
+      <div class="fg"><label>ملاحظة (اختياري)</label><input id="af-rnote" type="text" placeholder="سبب الترحيل، اتجاه السوق..."></div>`;
+  } else if (type === 'naked') {
+    form = `<div class="ca cy" style="margin-bottom:12px">
+        سيُسجَّل أن الـ Front انتهى. الـ Back يبقى مفرداً حتى تغلقه لاحقاً.<br>
+        <strong>Strike الـ Back: ${t.strike} | Back ينتهي: ${t.bexp||'—'}</strong>
+      </div>`;
+  } else if (type === 'edit-close') {
+    form = `<div class="g2">
+      <div class="fg"><label>سعر الإغلاق الصحيح ($)</label>
+        <input id="af-price" type="number" step="0.01" value="${t.closePrice !== null ? t.closePrice : ''}"></div>
+      <div class="fg"><label>تاريخ الإغلاق</label>
+        <input id="af-cdate" type="date" value="${t.closeDate||''}"></div>
+    </div>
+    <div style="color:var(--t3);font-size:.82rem;margin-bottom:10px">
+      Cost Basis: $${eff.toFixed(2)} | هدف 10%: $${(eff*1.10).toFixed(2)} | هدف 25%: $${(eff*1.25).toFixed(2)}
+    </div>`;
+  }
+
+  fd.innerHTML = `
+    <hr style="border-color:var(--border);margin:16px 0">
+    <div style="font-weight:700;color:var(--yellow);margin-bottom:12px">${titles[type]}</div>
+    ${form}
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="btn-add" style="max-width:180px;margin:0" onclick="doAction(${id},'${type}')">✅ تأكيد</button>
+      <button class="lg-btn lg-btn-d" style="padding:10px 18px;font-size:.88rem" onclick="document.getElementById('lg-action-form').classList.add('hidden')">إلغاء</button>
+    </div>`;
+  fd.classList.remove('hidden');
+}
+
+function calcRollCredit() {
+  const closeOld = parseFloat(document.getElementById('af-close-old').value);
+  const openNew  = parseFloat(document.getElementById('af-open-new').value);
+  const disp     = document.getElementById('roll-credit-display');
+  if (!disp) return;
+  if (isNaN(closeOld) || isNaN(openNew)) { disp.style.display = 'none'; return; }
+  const credit = closeOld - openNew;
+  disp.style.display = 'block';
+  if (credit > 0) {
+    disp.style.background = 'rgba(63,185,80,.15)';
+    disp.style.color = 'var(--green)';
+    disp.style.border = '1px solid var(--green)';
+    disp.innerHTML = `✅ Credit الصافي: <span style="font-size:1.2rem">+$${credit.toFixed(2)}</span> — يُضاف لتقليل Cost Basis`;
+  } else if (credit === 0) {
+    disp.style.background = 'rgba(210,153,34,.1)';
+    disp.style.color = 'var(--yellow)';
+    disp.style.border = '1px solid var(--yellow)';
+    disp.innerHTML = `⚠️ Credit الصافي: $0.00 — الترحيل بلا فائدة مالية`;
+  } else {
+    disp.style.background = 'rgba(248,81,73,.1)';
+    disp.style.color = 'var(--red)';
+    disp.style.border = '1px solid var(--red)';
+    disp.innerHTML = `⛔ Credit الصافي: $${credit.toFixed(2)} — الترحيل كلّفك مالاً (Debit Roll)`;
+  }
+}
+
+function doAction(id, type) {
+  const trades = getTrades();
+  const t = trades.find(x => x.id === id);
+  if (!t) return;
+  const today = new Date().toISOString().slice(0,10);
+
+  if (type === 'close') {
+    const v = parseFloat(document.getElementById('af-price').value);
+    if (isNaN(v)) { alert('أدخل سعراً صحيحاً'); return; }
+    const eff = effectiveDebit(t);
+    t.closePrice = v;
+    t.closeDate  = today;
+    t.status = v >= eff * 1.10 ? 'profit' : v > eff ? 'profit' : 'closed';
+
+  } else if (type === 'roll') {
+    const strike   = parseFloat(document.getElementById('af-strike').value);
+    const closeOld = parseFloat(document.getElementById('af-close-old').value);
+    const openNew  = parseFloat(document.getElementById('af-open-new').value);
+    const fexp     = document.getElementById('af-fexp').value;
+    const rnote    = document.getElementById('af-rnote').value.trim();
+    if (isNaN(strike) || isNaN(closeOld) || isNaN(openNew)) {
+      alert('أدخل Strike وسعر إغلاق Front القديم وسعر فتح Front الجديد'); return;
+    }
+    const credit = parseFloat((closeOld - openNew).toFixed(2));
+    if (credit <= 0) {
+      if (!confirm(`الـ Credit الصافي سالب ($${credit.toFixed(2)}) — هذا يعني أن الترحيل كلّفك مالاً.\nهل تريد المتابعة؟`)) return;
+    }
+    if (!t.rolls) t.rolls = [];
+    t.rolls.push({ date: today, fromStrike: t.strike, toStrike: strike, fexp, closeOld, openNew, credit, note: rnote });
+    t.strike = strike;
+    if (fexp) t.fexp = fexp;
+    t.status = 'rolled';
+
+  } else if (type === 'naked') {
+    t.status = 'back-naked';
+    t.backNakedDate = today;
+
+  } else if (type === 'edit-close') {
+    const v = parseFloat(document.getElementById('af-price').value);
+    const d = document.getElementById('af-cdate').value;
+    if (isNaN(v) || v < 0) { alert('أدخل سعراً صحيحاً'); return; }
+    const eff = effectiveDebit(t);
+    t.closePrice = v;
+    t.closeDate  = d || today;
+    t.status = v > eff ? 'profit' : 'closed';
+  }
+
+  saveTrades(trades);
+  viewTrade(id);
+  renderLog();
+}
+
+function closeDet() {
+  document.getElementById('lg-detail').classList.add('hidden');
+  currentViewId = null;
+  // reset active row highlight
+  document.querySelectorAll('.lg-row.active-row').forEach(r => r.classList.remove('active-row'));
+}
+
+function viewTrade(id) {
+  // toggle: same trade clicked again → close
+  if (currentViewId === id) { closeDet(); return; }
+  currentViewId = id;
+
+  const t = getTrades().find(x => x.id === id);
+  if (!t) return;
+  const det  = document.getElementById('lg-detail');
+  const body = document.getElementById('lg-detail-body');
+  det.classList.remove('hidden');
+
+  // highlight active row
+  document.querySelectorAll('.lg-row.active-row').forEach(r => r.classList.remove('active-row'));
+  const activeRow = document.querySelector(`.lg-row[data-id="${id}"]`);
+  if (activeRow) activeRow.classList.add('active-row');
+
+  const eff     = effectiveDebit(t);
+  const isClosed = t.status === 'profit' || t.status === 'closed';
+  const typeLbl  = t.optType === 'call' ? 'Call 📈' : t.optType === 'put' ? 'Put 📉' : '—';
+
+  const stMap = { open:'st-open', rolled:'st-roll', 'back-naked':'st-naked', profit:'st-profit', closed:'st-closed' };
+  const stLbl = { open:'مفتوحة', rolled:'مُرحَّلة', 'back-naked':'Back مفرد', profit:'ربح ✅', closed:'مغلقة' };
+
+  // ── Header metrics ──
+  let h = `<div class="g3">
+    <div class="mc"><div class="ml">السهم</div><div class="mv" style="color:var(--yellow)">${t.tk}</div><div class="ms">${typeLbl}</div></div>
+    <div class="mc"><div class="ml">Strike الحالي</div><div class="mv">${t.strike}</div><div class="ms">دخول: ${t.date}</div></div>
+    <div class="mc"><div class="ml">Cost Basis</div><div class="mv" style="color:var(--blue)">$${eff.toFixed(2)}</div>
+      <div class="ms">${t.rolls&&t.rolls.length?`بعد ${t.rolls.length} ترحيل`:'Net Debit الأصلي'}</div></div>
+  </div>`;
+
+  // ── Targets based on effective debit ──
+  h += `<table style="margin-top:14px"><thead><tr><th>المستوى</th><th>قيمة الـ Spread</th><th>الربح</th></tr></thead><tbody>
+    <tr><td>هدف 10%</td><td style="color:var(--green)">$${(eff*1.10).toFixed(2)}</td><td style="color:var(--green)">+$${(eff*0.1).toFixed(2)}</td></tr>
+    <tr><td>هدف 25%</td><td style="color:var(--green)">$${(eff*1.25).toFixed(2)}</td><td style="color:var(--green)">+$${(eff*0.25).toFixed(2)}</td></tr>
+    <tr><td>Max Loss</td><td style="color:var(--red)">$0.00</td><td style="color:var(--red)">−$${eff.toFixed(2)}</td></tr>
+  </tbody></table>`;
+
+  // ── Roll history ──
+  if (t.rolls && t.rolls.length) {
+    h += `<div style="margin-top:14px"><div style="font-weight:700;font-size:.88rem;margin-bottom:8px;color:var(--blue)">🔄 سجل الترحيلات (${t.rolls.length})</div>`;
+    h += `<div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">`;
+    t.rolls.forEach((r, i) => {
+      const newEff = t.debit - t.rolls.slice(0, i+1).reduce((s,x)=>s+(x.credit||0),0);
+      const creditColor = r.credit > 0 ? 'var(--green)' : r.credit < 0 ? 'var(--red)' : 'var(--yellow)';
+      const creditSign  = r.credit >= 0 ? '+' : '';
+      const priceDetail = (r.closeOld !== undefined && r.openNew !== undefined)
+        ? `<span style="color:var(--t3);font-size:.8rem"> (أغلقت بـ $${r.closeOld.toFixed(2)} — فتحت بـ $${r.openNew.toFixed(2)})</span>`
+        : '';
+      h += `<div style="padding:10px 14px;${i?'border-top:1px solid var(--border)':''}">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+          <span style="color:var(--t3);font-size:.8rem">📅 ${r.date}</span>
+          <span style="color:var(--yellow);font-weight:600">Strike: ${r.fromStrike} → ${r.toStrike}</span>
+          <span style="color:${creditColor};font-weight:700">${creditSign}$${r.credit.toFixed(2)} Credit</span>
+          ${priceDetail}
+          <span style="color:var(--t3);font-size:.82rem">→ Cost Basis الجديد: <strong>$${Math.max(0,newEff).toFixed(2)}</strong></span>
+          ${r.fexp?`<span style="color:var(--t3);font-size:.8rem">| انتهاء جديد: ${r.fexp}</span>`:''}
+        </div>
+        ${r.note?`<div style="color:var(--t3);font-size:.8rem;margin-top:4px">📝 ${r.note}</div>`:''}
+      </div>`;
+    });
+    h += `</div></div>`;
+  }
+
+  // ── Back Naked notice ──
+  if (t.status === 'back-naked') {
+    h += `<div class="ca" style="background:rgba(188,140,255,.1);border:1px solid var(--purple);border-radius:8px;padding:12px;margin-top:14px">
+      <strong style="color:var(--purple)">🎯 Back مفرد منذ ${t.backNakedDate||'—'}</strong><br>
+      الـ Front انتهى. Back ${t.optType==='call'?'Long Call':'Long Put'} Strike ${t.strike} ${t.bexp?'ينتهي '+t.bexp:''} يعمل وحده.
+    </div>`;
+  }
+
+  // ── Close result ──
+  if (isClosed && t.closePrice !== null) {
+    const pnl = t.closePrice - eff;
+    const pct = (eff > 0) ? pnl / eff * 100 : null;
+    const clr = pnl >= 0 ? 'var(--green)' : 'var(--red)';
+    const pctTxt = pct !== null ? ` (${pct>=0?'+':''}${pct.toFixed(1)}%)` : '';
+    h += `<div style="margin-top:14px;padding:14px;background:rgba(255,255,255,.05);border-radius:10px;border:1px solid var(--border)">
+      <strong>نتيجة الإغلاق — ${t.closeDate}</strong><br>
+      سعر الإغلاق: <strong>$${t.closePrice.toFixed(2)}</strong> |
+      P&L: <strong style="color:${clr}">${pnl>=0?'+':''}$${pnl.toFixed(2)}${pctTxt}</strong><br>
+      <small style="color:var(--t3)">محسوب على Cost Basis الفعلي $${eff.toFixed(2)}</small>
+    </div>`;
+  }
+
+  // ── Action buttons ──
+  if (!isClosed) {
+    const btns = [];
+    if (t.status !== 'back-naked') {
+      btns.push(`<button class="lg-btn lg-btn-v" style="padding:9px 16px" onclick="showAction(${t.id},'roll')">🔄 ترحيل</button>`);
+      btns.push(`<button class="lg-btn" style="padding:9px 16px;background:rgba(188,140,255,.15);color:var(--purple)" onclick="showAction(${t.id},'naked')">🎯 Front انتهى</button>`);
+    }
+    btns.push(`<button class="lg-btn" style="padding:9px 16px;background:rgba(248,81,73,.12);color:var(--red)" onclick="showAction(${t.id},'close')">🔒 ${t.status==='back-naked'?'أغلق Back':'أغلق الصفقة'}</button>`);
+    h += `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">${btns.join('')}</div>`;
+    h += `<div id="lg-action-form" class="hidden"></div>`;
+  } else {
+    // Closed trade — allow editing the close price
+    h += `<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="lg-btn lg-btn-v" style="padding:9px 16px" onclick="showAction(${t.id},'edit-close')">✏️ تعديل سعر الإغلاق</button>
+    </div>`;
+    h += `<div id="lg-action-form" class="hidden"></div>`;
+  }
+
+  // ── Export to Telegram ──
+  h += `<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <button id="exp-det-btn-${t.id}" class="btn" style="background:rgba(34,158,217,.15);color:#229ED9;border:1px solid rgba(34,158,217,.35);padding:8px 16px;font-size:.85rem" onclick="exportTrade(${t.id})">📤 صدّر النص</button>
+    <button class="btn" style="background:rgba(227,179,65,.12);color:#e3b341;border:1px solid rgba(227,179,65,.4);padding:8px 16px;font-size:.85rem" onclick="showTradeCard(${t.id})">🖼️ بطاقة صورة</button>
+    <a href="https://t.me/Elite_trade10" target="_blank" style="color:#229ED9;font-size:.82rem;text-decoration:none">📢 تابع القناة</a>
+  </div>`;
+
+  // ── Notes & dates ──
+  const meta = [];
+  if (t.fexp) meta.push(`Front ينتهي: ${t.fexp}`);
+  if (t.bexp) meta.push(`Back ينتهي: ${t.bexp}`);
+  if (meta.length) h += `<div style="margin-top:12px;color:var(--t3);font-size:.82rem">${meta.join(' &nbsp;|&nbsp; ')}</div>`;
+  if (t.note) h += `<div style="margin-top:5px;font-size:.83rem;color:var(--t2)">📝 ${t.note}</div>`;
+
+  body.innerHTML = h;
+  det.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function renderLog() {
+  const trades = getTrades();
+  const wrap = document.getElementById('lg-table-wrap');
+  const cnt  = document.getElementById('lg-count');
+  cnt.textContent = trades.length ? `${trades.length} صفقة` : '';
+
+  if (!trades.length) {
+    wrap.innerHTML = `<div style="text-align:center;padding:30px;color:var(--t3)">لا توجد صفقات بعد — أضف أول صفقة أعلاه</div>`;
+    return;
+  }
+
+  const stMap = { open:'st-open', rolled:'st-roll', 'back-naked':'st-naked', profit:'st-profit', closed:'st-closed' };
+  const stLbl = { open:'مفتوحة', rolled:'مُرحَّلة 🔄', 'back-naked':'Back مفرد 🎯', profit:'ربح ✅', closed:'مغلقة' };
+
+  let rows = `<div class="lg-row lg-hd">
+    <div class="lg-cell">السهم / النوع</div>
+    <div class="lg-cell">Strike</div>
+    <div class="lg-cell">Debit</div>
+    <div class="lg-cell">الحالة</div>
+    <div class="lg-cell">P&L</div>
+    <div class="lg-cell"></div>
+  </div>`;
+
+  trades.forEach(t => {
+    const eff  = effectiveDebit(t);
+    const pnl  = t.closePrice !== null ? (t.closePrice - eff) : null;
+    const pct  = (pnl !== null && eff > 0) ? pnl / eff * 100 : null;
+    const pnlTxt = pnl !== null
+      ? `<span style="color:${pnl>=0?'var(--green)':'var(--red)'}">${pnl>=0?'+':''}$${pnl.toFixed(2)}<br><small>${pct!==null?(pct>=0?'+':'')+pct.toFixed(1)+'%':'—'}</small></span>`
+      : `<span style="color:var(--t3)">—</span>`;
+    const typeLbl = t.optType === 'call' ? '📈' : t.optType === 'put' ? '📉' : '';
+
+    rows += `<div class="lg-row${currentViewId===t.id?' active-row':''}" data-id="${t.id}">
+      <div class="lg-cell">
+        <span style="color:var(--t3);font-size:.75rem;display:block">السهم</span>
+        <strong>${t.tk}</strong> ${typeLbl} &nbsp;
+        <span class="lg-status ${stMap[t.status]||'st-open'}">${stLbl[t.status]||'مفتوحة'}</span>
+        <br><small style="color:var(--t3)">${t.date} | Strike: ${t.strike} | Debit: $${t.debit.toFixed(2)}</small>
+      </div>
+      <div class="lg-cell lg-cell-hide">${t.strike}</div>
+      <div class="lg-cell lg-cell-hide">$${t.debit.toFixed(2)}</div>
+      <div class="lg-cell lg-cell-hide"><span class="lg-status ${stMap[t.status]||'st-open'}">${stLbl[t.status]||'مفتوحة'}</span></div>
+      <div class="lg-cell">
+        <span style="color:var(--t3);font-size:.75rem;display:block">P&amp;L</span>
+        ${pnlTxt}
+      </div>
+      <div class="lg-act">
+        <button class="lg-btn lg-btn-v" onclick="viewTrade(${t.id})">عرض</button>
+        <button class="lg-btn" style="background:rgba(227,179,65,.12);color:#e3b341;border:1px solid rgba(227,179,65,.35)" onclick="showTradeCard(${t.id});event.stopPropagation()">🖼️</button>
+        <button id="exp-btn-${t.id}" class="lg-btn" style="background:rgba(34,158,217,.15);color:#229ED9;border:1px solid rgba(34,158,217,.3)" onclick="exportTrade(${t.id});event.stopPropagation()">📤</button>
+        <button class="lg-btn lg-btn-d" onclick="deleteTrade(${t.id})">حذف</button>
+      </div>
+    </div>`;
+  });
+
+  wrap.innerHTML = rows;
+}
+
+function exportTrade(id) {
+  const t = getTrades().find(x => x.id === id);
+  if (!t) return;
+  const eff = effectiveDebit(t);
+  const typeEmoji = t.optType === 'call' ? 'Call 📈' : t.optType === 'put' ? 'Put 📉' : '—';
+  const stLbl = { open:'مفتوحة 🟡', rolled:'مُرحَّلة 🔄', 'back-naked':'Back مفرد 🎯', profit:'ربح ✅', closed:'مغلقة 🔒' };
+  const status = stLbl[t.status] || '—';
+  const sep = '─────────────────';
+  const L = '\u200E'; // LTR mark — يُجبر الأرقام على الظهور بالإنجليزية في التلجرام
+
+  const lines = [];
+  lines.push(`📊 Long Calendar Spread`);
+  lines.push(`${t.tk}  ${typeEmoji}`);
+  lines.push(sep);
+  lines.push(`تاريخ الدخول:  ${t.date}`);
+  lines.push(`Strike:  ${L}${t.strike}`);
+  lines.push(sep);
+  lines.push(`Net Debit:  ${L}$${t.debit.toFixed(2)}`);
+  if (t.rolls && t.rolls.length) {
+    lines.push(`ترحيلات:  ${L}${t.rolls.length}`);
+    lines.push(`Cost Basis:  ${L}$${eff.toFixed(2)}`);
+  }
+  lines.push(sep);
+  lines.push(`هدف 10%  ➜  ${L}$${(eff * 1.10).toFixed(2)}`);
+  lines.push(`هدف 25%  ➜  ${L}$${(eff * 1.25).toFixed(2)}`);
+  lines.push(`Max Loss  ➜  ${L}-$${eff.toFixed(2)}`);
+  lines.push(sep);
+  lines.push(`الحالة:  ${status}`);
+  const isClosed = t.status === 'profit' || t.status === 'closed';
+  if (isClosed && t.closePrice !== null) {
+    const pnl = t.closePrice - eff;
+    const pct = eff > 0 ? pnl / eff * 100 : null;
+    const sign = pnl >= 0 ? '+' : '';
+    const pctTxt = pct !== null ? `  (${L}${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%)` : '';
+    lines.push(`النتيجة:  ${pnl >= 0 ? '✅' : '❌'}  ${L}${sign}$${pnl.toFixed(2)}${pctTxt}`);
+  }
+  if (t.note) { lines.push(sep); lines.push(`📝 ${t.note}`); }
+  lines.push(sep);
+  lines.push(`📡 via ALHARTHI`);
+  lines.push(`@Elite_trade10`);
+
+  const txt = lines.join('\n');
+  const flashBtn = (btnId, label) => {
+    const btn = document.getElementById(btnId);
+    if (btn) { btn.textContent = '✅ تم النسخ!'; setTimeout(() => { btn.textContent = label; }, 2000); }
+  };
+  navigator.clipboard.writeText(txt)
+    .then(() => { flashBtn(`exp-btn-${id}`, '📤 صدّر'); flashBtn(`exp-det-btn-${id}`, '📤 صدّر الصفقة'); })
+    .catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      flashBtn(`exp-btn-${id}`, '📤 صدّر'); flashBtn(`exp-det-btn-${id}`, '📤 صدّر الصفقة');
+    });
+}
+
+// Init
+chkEntry();
+renderLog();
+</script>
+</body>
+</html>
