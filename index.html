@@ -93,6 +93,7 @@ body { font-family:'Segoe UI',Tahoma,sans-serif; background:var(--bg); color:var
 .ig { background:rgba(63,185,80,.2); color:var(--green); }
 .ir { background:rgba(248,81,73,.2); color:var(--red); }
 .ib { background:rgba(188,140,255,.25); color:var(--purple); }
+.iy { background:rgba(210,153,34,.2); color:var(--yellow); }
 .ci-txt .cit { font-size:0.88rem; font-weight:500; }
 .ci-txt .cid { font-size:0.78rem; color:var(--t3); margin-top:2px; }
 
@@ -277,7 +278,7 @@ hr.dv { border:none; border-top:1px solid var(--border); margin:16px 0; }
 
         <div class="fg"><label>IV Rank / IV Percentile (%)</label>
           <input id="e-iv" type="number" placeholder="0-100" min="0" max="100" oninput="chkEntry()">
-          <div style="display:flex;justify-content:space-between;color:var(--t3);font-size:.72rem;margin-top:3px"><span>0%</span><span style="color:var(--yellow)">المطلوب ≤ 40%</span><span>100%</span></div></div>
+          <div style="display:flex;justify-content:space-between;color:var(--t3);font-size:.72rem;margin-top:3px"><span>0%</span><span id="iv-hint" style="color:var(--yellow)">المطلوب ≤ 40%</span><span>100%</span></div></div>
 
         <div class="fg"><label>النظرة (Outlook)</label>
           <select id="e-outlook" onchange="chkEntry()">
@@ -796,9 +797,9 @@ function setC(id, st, badge, detail) {
   const ic = document.getElementById('ic-' + id);
   const bg = document.getElementById('bg-' + id);
   const dt = document.getElementById('dt-' + id);
-  const icCls = { g:'ig', r:'ir', b:'ib', p:'ip' };
-  const icTxt = { g:'✓', r:'✗', b:'💥', p:'?' };
-  const bgCls = { g:'sg', r:'sr', b:'sb3', p:'sb2' };
+  const icCls = { g:'ig', r:'ir', b:'ib', p:'ip', y:'iy' };
+  const icTxt = { g:'✓', r:'✗', b:'💥', p:'?', y:'⚠' };
+  const bgCls = { g:'sg', r:'sr', b:'sb3', p:'sb2', y:'sy' };
   ic.className = 'ci-icon ' + (icCls[st] || 'ip');
   ic.textContent = icTxt[st] || '?';
   bg.className = 'sb ' + (bgCls[st] || 'sb2');
@@ -825,7 +826,7 @@ function chkEntry() {
     if (ivTit) ivTit.textContent = 'IV مرتفع — مطلوب للـ Crush Play (≥50%)';
     if (!isNaN(iv)) {
       if (iv >= 50) { setC('iv','g','✓ مرتفع — مثالي',`IV: ${iv}% — Front سيُسحق بعد الخبر ✓`); pass++; }
-      else if (iv >= 35) { setC('iv','g','✓ مقبول',`IV: ${iv}% — مقبول، الأفضل ≥50% لـ Crush أقوى`); pass++; }
+      else if (iv >= 35) { setC('iv','y','⚠️ منخفض للـ Crush',`IV: ${iv}% — أقل من المثالي، يجب ≥50% لـ Crush فعّال`); }
       else { setC('iv','r','✗ منخفض',`IV: ${iv}% — منخفض جداً! لن يكون Crush مجدياً (يجب ≥50%)`); }
     } else setC('iv','p','انتظار','المطلوب: IV مرتفع (≥50%) في Front لينهار بعد الخبر');
   } else {
@@ -925,13 +926,23 @@ function chkEntry() {
     document.getElementById('sm-pct').textContent = `${(db/px*100).toFixed(2)}%`;
   }
 
+  // IV hint label
+  const ivHint = document.getElementById('iv-hint');
+  if (ivHint) {
+    if (ev === 'crush') { ivHint.textContent = 'المطلوب ≥ 50% (Crush Play)'; ivHint.style.color = 'var(--red)'; }
+    else { ivHint.textContent = 'المطلوب ≤ 40%'; ivHint.style.color = 'var(--yellow)'; }
+  }
+
   // Overall
   const rb = document.getElementById('res-entry');
   const rc = document.getElementById('res-entry-c');
   rb.classList.remove('hidden','ok','er','wa','in');
   const hasData = !isNaN(iv) || ou || !isNaN(fd);
   if (hasData) {
-    if (pass >= 7) { rb.classList.add('ok'); rc.innerHTML = `<span style="font-size:1.05rem;font-weight:700;color:var(--green)">✅ الصفقة مؤهلة للدخول (${pass}/8)</span><br><span style="color:var(--t2);font-size:.85rem">جميع الشروط متحققة</span>`; }
+    if (ev === 'yes') {
+      rb.classList.add('er');
+      rc.innerHTML = `<span style="font-size:1.05rem;font-weight:700;color:var(--red)">⛔ لا تدخل — حدث كبير قريب!</span><br><span style="color:var(--t2);font-size:.85rem">Earnings أو أخبار تُدمر Calendar النقي — انتظر أو استخدم Diagonal</span>`;
+    } else if (pass >= 7) { rb.classList.add('ok'); rc.innerHTML = `<span style="font-size:1.05rem;font-weight:700;color:var(--green)">✅ الصفقة مؤهلة للدخول (${pass}/8)</span><br><span style="color:var(--t2);font-size:.85rem">جميع الشروط متحققة</span>`; }
     else if (pass >= 5) { rb.classList.add('wa'); rc.innerHTML = `<span style="font-size:1.05rem;font-weight:700;color:var(--yellow)">⚠️ تحقق جزئي (${pass}/8)</span><br><span style="color:var(--t2);font-size:.85rem">راجع الشروط الحمراء</span>`; }
     else { rb.classList.add('er'); rc.innerHTML = `<span style="font-size:1.05rem;font-weight:700;color:var(--red)">❌ لا تدخل (${pass}/8)</span><br><span style="color:var(--t2);font-size:.85rem">كثير من الشروط غير متحققة</span>`; }
   }
