@@ -1091,15 +1091,19 @@ function calcDec() {
     ${near?'<strong style="color:var(--green)">✓ السعر قريب من Strike — فرصة تعافٍ جيدة</strong>':'<strong style="color:var(--yellow)">⚠️ السعر بعيد — راقب التعافي</strong>'}<br><br>
     <strong>أغلق الـ Back إذا خسر $${(od*0.65).toFixed(2)} (50-70% من الـ Debit)</strong></div></div>
     <div class="ca cb" style="margin-top:12px"><strong>خيار دفاعي:</strong> ${vertNote}</div>`;
-  } else if (isCrush && fst === 'alive') {
-    // IV Crush Play — waiting for the event
+  } else if (isCrush && (fst === 'alive' || fst === 'near')) {
+    // IV Crush Play — waiting for the event (alive or near expiry)
+    const isNear = fst === 'near' || (!isNaN(fd) && fd <= 3);
     const daysNote = !isNaN(fd) ? `<strong style="color:var(--yellow)">${fd} أيام</strong> حتى انتهاء الـ Front` : 'الـ Front نشط';
+    const nearWarning = isNear
+      ? `<br><br><strong style="color:var(--red)">⚡ الإعلان وشيك أو الـ Front على وشك الانتهاء!</strong><br>إذا صدر الخبر → أغلق الـ Front فوراً بعده مباشرة`
+      : '';
     dec = `<div class="bd bd-roll" style="border-color:var(--purple);background:rgba(188,140,255,.1)">
     <div class="bd-icon">💥</div>
-    <div class="bd-title">IV Crush Play — انتظر الخبر</div>
+    <div class="bd-title">IV Crush Play — ${isNear ? 'الإعلان وشيك!' : 'انتظر الخبر'}</div>
     <div class="bd-desc">${daysNote}<br><br>
     الـ Front بـ IV عالٍ الآن ← ينهار فور الإعلان<br>
-    <strong style="color:var(--green)">✅ هذا هو القصد — DTE قصير = طبيعي في هذه الاستراتيجية</strong><br><br>
+    <strong style="color:var(--green)">✅ هذا هو القصد — DTE قصير = طبيعي في هذه الاستراتيجية</strong>${nearWarning}<br><br>
     <strong>📌 الخطة:</strong><br>
     1️⃣ انتظر الإعلان<br>
     2️⃣ بعد الخبر مباشرة: أغلق الـ Front (سيكون رخيصاً جداً بعد IV Crush)<br>
