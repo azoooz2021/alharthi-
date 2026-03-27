@@ -316,7 +316,7 @@ hr.dv { border:none; border-top:1px solid var(--border); margin:16px 0; }
 
         <div class="fg"><label>هل هناك حدث كبير قريب؟ (Earnings / خبر)</label>
           <div class="tg" id="tg-ev">
-            <div class="tb on" onclick="tgl('tg-ev',this,'no')">لا ✓</div>
+            <div class="tb on" data-val="no" onclick="tgl('tg-ev',this,'no')">لا ✓</div>
             <div class="tb" onclick="tgl('tg-ev',this,'yes')">نعم — تجنب ⚠️</div>
             <div class="tb" onclick="tgl('tg-ev',this,'crush')">IV Crush Play 💥</div>
           </div></div>
@@ -326,10 +326,10 @@ hr.dv { border:none; border-top:1px solid var(--border); margin:16px 0; }
     <div>
       <div class="card">
         <div class="ct">✅ فحص شروط الدخول</div>
-        <div class="ci"><div class="ci-icon ip" id="ic-iv">?</div><div class="ci-txt"><div class="cit">IV Rank منخفض (&lt;40%)</div><div class="cid" id="dt-iv">المطلوب: 25-40% — لم تُدخل قيمة</div></div><span class="sb sb2" id="bg-iv">انتظار</span></div>
+        <div class="ci"><div class="ci-icon ip" id="ic-iv">?</div><div class="ci-txt"><div class="cit" id="cit-iv">IV Rank منخفض (≤40%)</div><div class="cid" id="dt-iv">المطلوب: 25-40% — لم تُدخل قيمة</div></div><span class="sb sb2" id="bg-iv">انتظار</span></div>
         <div class="ci"><div class="ci-icon ip" id="ic-ou">?</div><div class="ci-txt"><div class="cit">النظرة: محايدة أو ميل خفيف</div><div class="cid" id="dt-ou">Neutral / Mildly Bullish أو Bearish</div></div><span class="sb sb2" id="bg-ou">انتظار</span></div>
-        <div class="ci"><div class="ci-icon ip" id="ic-fd">?</div><div class="ci-txt"><div class="cit">DTE الأمامي: 30-45 يوم</div><div class="cid" id="dt-fd">لم تُدخل قيمة</div></div><span class="sb sb2" id="bg-fd">انتظار</span></div>
-        <div class="ci"><div class="ci-icon ip" id="ic-bd">?</div><div class="ci-txt"><div class="cit">DTE الخلفي: 60-90+ يوم</div><div class="cid" id="dt-bd">لم تُدخل قيمة</div></div><span class="sb sb2" id="bg-bd">انتظار</span></div>
+        <div class="ci"><div class="ci-icon ip" id="ic-fd">?</div><div class="ci-txt"><div class="cit" id="cit-fd">DTE الأمامي: 30-45 يوم</div><div class="cid" id="dt-fd">لم تُدخل قيمة</div></div><span class="sb sb2" id="bg-fd">انتظار</span></div>
+        <div class="ci"><div class="ci-icon ip" id="ic-bd">?</div><div class="ci-txt"><div class="cit" id="cit-bd">DTE الخلفي: 60-90+ يوم</div><div class="cid" id="dt-bd">لم تُدخل قيمة</div></div><span class="sb sb2" id="bg-bd">انتظار</span></div>
         <div class="ci"><div class="ci-icon ip" id="ic-st">?</div><div class="ci-txt"><div class="cit">Strike = ATM أو قريب جداً</div><div class="cid" id="dt-st">أدخل Strike وسعر السهم</div></div><span class="sb sb2" id="bg-st">انتظار</span></div>
         <div class="ci"><div class="ci-icon ip" id="ic-db">?</div><div class="ci-txt"><div class="cit">Net Debit ≤ 2% من سعر السهم</div><div class="cid" id="dt-db">أقل ما يمكن</div></div><span class="sb sb2" id="bg-db">انتظار</span></div>
         <div class="ci"><div class="ci-icon ip" id="ic-ev">?</div><div class="ci-txt"><div class="cit" id="dt-ev-t">الأحداث الكبيرة (Earnings)</div><div class="cid" id="dt-ev">Earnings أو أخبار → تؤذي Calendar النقي</div></div><span class="sb sb2" id="bg-ev">انتظار</span></div>
@@ -820,10 +820,21 @@ function chkEntry() {
   let pass = 0;
 
   // IV
-  if (!isNaN(iv)) {
-    if (iv <= 40) { setC('iv','g','✓ منخفض',`IV: ${iv}% — مناسب (≤40%)`); pass++; }
-    else { setC('iv','r','✗ مرتفع',`IV: ${iv}% — مرتفع! يجب ≤40%`); }
-  } else setC('iv','p','انتظار','المطلوب: IV Rank ≤ 40%');
+  const ivTit = document.getElementById('cit-iv');
+  if (ev === 'crush') {
+    if (ivTit) ivTit.textContent = 'IV مرتفع — مطلوب للـ Crush Play (≥50%)';
+    if (!isNaN(iv)) {
+      if (iv >= 50) { setC('iv','g','✓ مرتفع — مثالي',`IV: ${iv}% — Front سيُسحق بعد الخبر ✓`); pass++; }
+      else if (iv >= 35) { setC('iv','g','✓ مقبول',`IV: ${iv}% — مقبول، الأفضل ≥50% لـ Crush أقوى`); pass++; }
+      else { setC('iv','r','✗ منخفض',`IV: ${iv}% — منخفض جداً! لن يكون Crush مجدياً (يجب ≥50%)`); }
+    } else setC('iv','p','انتظار','المطلوب: IV مرتفع (≥50%) في Front لينهار بعد الخبر');
+  } else {
+    if (ivTit) ivTit.textContent = 'IV Rank منخفض (≤40%)';
+    if (!isNaN(iv)) {
+      if (iv <= 40) { setC('iv','g','✓ منخفض',`IV: ${iv}% — مناسب (≤40%)`); pass++; }
+      else { setC('iv','r','✗ مرتفع',`IV: ${iv}% — مرتفع! يجب ≤40%`); }
+    } else setC('iv','p','انتظار','المطلوب: IV Rank ≤ 40%');
+  }
 
   // Outlook
   if (ou) {
@@ -832,23 +843,37 @@ function chkEntry() {
   } else setC('ou','p','انتظار','Neutral / Mildly Bullish أو Bearish');
 
   // Front DTE
-  if (!isNaN(fd)) {
-    if (ev === 'crush') {
-      // IV Crush Play — DTE قصير مقصود
-      if (fd <= 14) { setC('fd','g','✓ IV Crush',`DTE ${fd} يوم — قصير مقصود للـ Earnings Play`); pass++; }
-      else { setC('fd','r','✗ طويل',`${fd} يوم — في Earnings Play يجب أن يكون Front قريب الانتهاء (1-14 يوم)`); }
-    } else {
+  const fdTit = document.getElementById('cit-fd');
+  if (ev === 'crush') {
+    if (fdTit) fdTit.textContent = 'DTE الأمامي: 1-14 يوم (Crush Play)';
+    if (!isNaN(fd)) {
+      if (fd <= 14) { setC('fd','g','✓ IV Crush',`DTE ${fd} يوم — قصير مقصود، Front يحمل IV عالٍ`); pass++; }
+      else { setC('fd','r','✗ طويل',`${fd} يوم — في Crush Play يجب Front قريب الانتهاء (1-14 يوم)`); }
+    } else setC('fd','p','انتظار','Front DTE: 1-14 يوم (قريب الانتهاء مقصود)');
+  } else {
+    if (fdTit) fdTit.textContent = 'DTE الأمامي: 30-45 يوم';
+    if (!isNaN(fd)) {
       if (fd >= 30 && fd <= 45) { setC('fd','g','✓ مثالي',`DTE الأمامي: ${fd} يوم`); pass++; }
       else if (fd < 30) { setC('fd','r','✗ قصير',`${fd} يوم — قصير (يجب 30-45 في الصفقة العادية)`); }
       else { setC('fd','r','✗ طويل',`${fd} يوم — طويل (يجب 30-45)`); }
-    }
-  } else setC('fd','p','انتظار', ev === 'crush' ? 'Front DTE: 1-14 يوم (قريب الانتهاء)' : 'Front DTE: 30-45 يوم');
+    } else setC('fd','p','انتظار','Front DTE: 30-45 يوم');
+  }
 
   // Back DTE
-  if (!isNaN(bd)) {
-    if (bd >= 60) { setC('bd','g','✓ مثالي',`DTE الخلفي: ${bd} يوم`); pass++; }
-    else { setC('bd','r','✗ قصير',`${bd} يوم — قصير (يجب 60-90+)`); }
-  } else setC('bd','p','انتظار','Back DTE: 60-90+ يوم');
+  const bdTit = document.getElementById('cit-bd');
+  if (ev === 'crush') {
+    if (bdTit) bdTit.textContent = 'DTE الخلفي: 30+ يوم (Crush Play)';
+    if (!isNaN(bd)) {
+      if (bd >= 30) { setC('bd','g','✓ مناسب',`DTE الخلفي: ${bd} يوم — يحتفظ بقيمته بعد الـ Crush`); pass++; }
+      else { setC('bd','r','✗ قصير',`${bd} يوم — قصير جداً (يجب 30+ في Crush Play)`); }
+    } else setC('bd','p','انتظار','Back DTE: 30+ يوم (أطول بكثير من Front)');
+  } else {
+    if (bdTit) bdTit.textContent = 'DTE الخلفي: 60-90+ يوم';
+    if (!isNaN(bd)) {
+      if (bd >= 60) { setC('bd','g','✓ مثالي',`DTE الخلفي: ${bd} يوم`); pass++; }
+      else { setC('bd','r','✗ قصير',`${bd} يوم — قصير (يجب 60-90+)`); }
+    } else setC('bd','p','انتظار','Back DTE: 60-90+ يوم');
+  }
 
   // Strike vs Price
   if (!isNaN(fs) && !isNaN(px)) {
@@ -1185,6 +1210,7 @@ function generateTradeCard(data) {
   if (!isNaN(data.fs) && data.fs !== undefined) rowCount++;
   if (!isNaN(data.fd) && data.fd !== undefined) rowCount++;
   rowCount += 3; // debit + 10% + 25%
+  if (data.closePrice !== null && data.closePrice !== undefined) rowCount++;
   if (data.pnl !== null && data.pnl !== undefined) rowCount++;
   const H = 100                           // header
           + (data.goal ? 46 : 0)          // goal badge
@@ -1260,6 +1286,9 @@ function generateTradeCard(data) {
     row('Net Debit', '$' + debit.toFixed(2));
     row('هدف 10%  ➜', '$' + (debit * 1.10).toFixed(2), YELLOW);
     row('هدف 25%  ➜', '$' + (debit * 1.25).toFixed(2), GREEN);
+  }
+  if (data.closePrice !== null && data.closePrice !== undefined) {
+    row('سعر الإغلاق', '$' + data.closePrice.toFixed(2), YELLOW);
   }
   if (data.pnl !== null && data.pnl !== undefined) {
     const ps = data.pnl >= 0 ? '+' : '';
@@ -1354,7 +1383,8 @@ function showTradeCard(id) {
   showCardModal(generateTradeCard({
     tk: t.tk, optType: t.optType, goal: null,
     px: NaN, fs: t.strike, fd: NaN,
-    od: t.debit, eff, pnl, pct, decTitle: null
+    od: t.debit, eff, pnl, pct, decTitle: null,
+    closePrice: (isClosed && t.closePrice !== null) ? t.closePrice : null
   }), t.tk + '-trade.png');
 }
 
@@ -1831,6 +1861,7 @@ function exportTrade(id) {
     const pct = eff > 0 ? pnl / eff * 100 : null;
     const sign = pnl >= 0 ? '+' : '';
     const pctTxt = pct !== null ? `  (${L}${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%)` : '';
+    lines.push(`سعر الإغلاق:  ${L}$${t.closePrice.toFixed(2)}`);
     lines.push(`النتيجة:  ${pnl >= 0 ? '✅' : '❌'}  ${L}${sign}$${pnl.toFixed(2)}${pctTxt}`);
   }
   if (t.note) { lines.push(sep); lines.push(`📝 ${t.note}`); }
